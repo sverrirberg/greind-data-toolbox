@@ -10,7 +10,7 @@ venv/
 
 # Model + data files
 *.pkl
-*.csv
+
 
 # Logs + feedback
 logs/
@@ -49,3 +49,10 @@ __pycache__/
 *.log
 feedback_logs/
 datasets/
+
+# Allow model files
+!xgb_unspsc_model.pkl
+!xgb_label_encoder.pkl
+
+# But keep this specific one
+!UNSPSC_classification.csv

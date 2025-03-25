@@ -1,0 +1,775 @@
+unspsc_code,level,sub_category,description
+501017,CLASS,GS_FOOD,Nuts and seeds
+501025,CLASS,GS_FOOD,Nuts excluding wild edible nuts and groundnuts
+501115,CLASS,GS_FOOD,Minimally processed meat and poultry products
+501120,CLASS,GS_FOOD,Processed meat and poultry products
+501215,CLASS,GS_FOOD,Fish
+501216,CLASS,GS_FOOD,Shellfish
+501217,CLASS,GS_FOOD,Aquatic invertebrates
+501218,CLASS,GS_FOOD,Aquatic plants
+501219,CLASS,GS_FOOD,Salt preserved seafoods
+501220,CLASS,GS_FOOD,Wild caught fish
+501221,CLASS,GS_FOOD,Farm raised fish
+501224,CLASS,GS_FOOD,Wild caught shellfish
+501225,CLASS,GS_FOOD,Farm raised shellfish
+501316,CLASS,GS_FOOD,Eggs and egg substitutes
+501317,CLASS,GS_FOOD,Milk and butter products
+501318,CLASS,GS_FOOD,Cheese
+501515,CLASS,GS_FOOD,Edible vegetable and plant oils and fats
+501516,CLASS,GS_FOOD,Edible animal oils and fats
+501517,CLASS,GS_FOOD,Vegetable waxes
+501615,CLASS,GS_FOOD,Chocolate and sugars and sweetening products
+501618,CLASS,GS_FOOD,Confectionary products
+501619,CLASS,GS_FOOD,Sugar products
+501715,CLASS,GS_FOOD,Herbs and spices and extracts
+501717,CLASS,GS_FOOD,Vinegars and cooking wines
+501718,CLASS,GS_FOOD,Sauces and spreads and condiments
+501719,CLASS,GS_FOOD,Pickles and relish and olives
+501720,CLASS,GS_FOOD,Fermented soybean products
+501817,CLASS,GS_FOOD,Baking mixes and supplies
+501819,CLASS,GS_FOOD,Bread and biscuits and cookies
+501820,CLASS,GS_FOOD,Cakes and pies and pastries
+501915,CLASS,GS_FOOD,Prepared soups and stews
+501921,CLASS,GS_FOOD,Snack foods
+501923,CLASS,GS_FOOD,Desserts and dessert toppings
+501924,CLASS,GS_FOOD,Jams and jellies and nut and sweet spreads and fruit conserves
+501925,CLASS,GS_FOOD,Sandwiches and filled rolls
+501926,CLASS,GS_FOOD,Prepared side dishes
+501927,CLASS,GS_FOOD,Packaged combination meals
+501928,CLASS,GS_FOOD,Savory pies and quiches and pasties
+501929,CLASS,GS_FOOD,Plain pasta and noodles
+501930,CLASS,GS_FOOD,Infant foods and beverages
+501931,CLASS,GS_FOOD,Instant mixes and supplies
+501932,CLASS,GS_FOOD,Prepared salads
+501933,CLASS,GS_FOOD,Flour tortillas
+501934,CLASS,GS_FOOD,Food baskets
+502017,CLASS,GS_FOOD,Coffee and tea
+502022,CLASS,GS_FOOD,Alcoholic beverages
+502023,CLASS,GS_FOOD,Non alcoholic beverages
+502024,CLASS,GS_FOOD,Fresh citrus juice or concentrate
+502025,CLASS,GS_FOOD,Fresh berry juice or concentrate
+502026,CLASS,GS_FOOD,Fresh pome fruit juice or concentrate
+502027,CLASS,GS_FOOD,Fresh drupe or stone fruit juice or concentrate
+502028,CLASS,GS_FOOD,Fresh tropical fruit juice or concentrate
+502030,CLASS,GS_FOOD,Fresh melon juice or concentrates
+502031,CLASS,GS_FOOD,Fresh vegetable juice or concentrate
+502032,CLASS,GS_FOOD,Raw milk products
+312015,CLASS,GS_PACKAGING,Tape
+502210,CLASS,GS_FOOD,Pulses
+502211,CLASS,GS_FOOD,Cereals
+502212,CLASS,GS_FOOD,Processed cereals
+502213,CLASS,GS_FOOD,Flour and milled products
+521615,CLASS,GS_ELECTRONICS,Audio and visual equipment
+432115,CLASS,GS_ELECTRONICS,Computers
+431915,CLASS,GS_ELECTRONICS,Personal communication devices
+432014,CLASS,GS_ELECTRONICS,System Cards
+432015,CLASS,GS_ELECTRONICS,System boards processors interfaces or modules
+432016,CLASS,GS_ELECTRONICS,Chassis components
+432018,CLASS,GS_ELECTRONICS,Media storage devices
+432019,CLASS,GS_ELECTRONICS,Media storage device accessories
+432020,CLASS,GS_ELECTRONICS,Removable storage media
+301015,CLASS,GS_CONSTRUCTION,Angles
+301017,CLASS,GS_CONSTRUCTION,Beams
+301018,CLASS,GS_CONSTRUCTION,Channels
+301020,CLASS,GS_CONSTRUCTION,Foil
+301022,CLASS,GS_CONSTRUCTION,Plate
+301023,CLASS,GS_CONSTRUCTION,Profiles
+301024,CLASS,GS_CONSTRUCTION,Rod
+301028,CLASS,GS_CONSTRUCTION,Piling
+301029,CLASS,GS_CONSTRUCTION,Post
+301031,CLASS,GS_CONSTRUCTION,Rails
+301032,CLASS,GS_CONSTRUCTION,Grating
+301035,CLASS,GS_CONSTRUCTION,Honeycomb core
+301036,CLASS,GS_CONSTRUCTION,Structural products
+301037,CLASS,GS_CONSTRUCTION,Braid
+301038,CLASS,GS_CONSTRUCTION,Metallic fibers and filaments
+301039,CLASS,GS_CONSTRUCTION,Shafts
+301040,CLASS,GS_CONSTRUCTION,Hollow structural sections HSS
+301115,CLASS,GS_CONSTRUCTION,Concrete and mortars
+301116,CLASS,GS_CONSTRUCTION,Cement and lime
+301117,CLASS,GS_CONSTRUCTION,Plasters
+301118,CLASS,GS_CONSTRUCTION,Aggregates
+301119,CLASS,GS_CONSTRUCTION,Concrete reinforcement hardware
+301215,CLASS,GS_CONSTRUCTION,Bituminous derivatives
+301216,CLASS,GS_CONSTRUCTION,Asphalts
+301217,CLASS,GS_CONSTRUCTION,Road and railroad construction materials
+301218,CLASS,GS_CONSTRUCTION,Landscape architecture materials
+301219,CLASS,GS_CONSTRUCTION,Soil stabilizers and reinforcing materials
+301315,CLASS,GS_CONSTRUCTION,Blocks
+301316,CLASS,GS_CONSTRUCTION,Bricks
+301317,CLASS,GS_CONSTRUCTION,Tiles and flagstones
+301415,CLASS,GS_CONSTRUCTION,Thermal insulation
+301416,CLASS,GS_CONSTRUCTION,Specialty insulation
+301417,CLASS,GS_CONSTRUCTION,Insulation sealing layers
+301515,CLASS,GS_CONSTRUCTION,Roofing materials
+301516,CLASS,GS_CONSTRUCTION,Roofing accessories
+301517,CLASS,GS_CONSTRUCTION,Rain gutters and accessories
+301518,CLASS,GS_CONSTRUCTION,Siding and exterior wall materials
+301519,CLASS,GS_CONSTRUCTION,Finishing materials and products
+301520,CLASS,GS_CONSTRUCTION,Fencing
+301521,CLASS,GS_CONSTRUCTION,Surface
+301615,CLASS,GS_CONSTRUCTION,Wall finishing materials
+301616,CLASS,GS_CONSTRUCTION,Ceiling materials
+301617,CLASS,GS_CONSTRUCTION,Flooring
+301618,CLASS,GS_CONSTRUCTION,Cabinetry
+301619,CLASS,GS_CONSTRUCTION,Molding and millwork
+301620,CLASS,GS_CONSTRUCTION,Interior laminates
+301621,CLASS,GS_CONSTRUCTION,Stairs and stairways
+301622,CLASS,GS_CONSTRUCTION,Countertops
+301624,CLASS,GS_CONSTRUCTION,Partition walls
+301715,CLASS,GS_CONSTRUCTION,Doors
+301716,CLASS,GS_CONSTRUCTION,Windows
+301717,CLASS,GS_CONSTRUCTION,Glass products
+301718,CLASS,GS_CONSTRUCTION,Skylights
+301719,CLASS,GS_CONSTRUCTION,Window frames
+301720,CLASS,GS_CONSTRUCTION,Gates
+301721,CLASS,GS_CONSTRUCTION,Garage doors and operators
+301815,CLASS,GS_CONSTRUCTION,Sanitary ware
+302515,CLASS,GS_CONSTRUCTION,Underground roof support structures
+302615,CLASS,GS_CONSTRUCTION,Brass bars
+302616,CLASS,GS_CONSTRUCTION,Brass sheets
+302617,CLASS,GS_CONSTRUCTION,Brass ingots strips billets and coil
+302618,CLASS,GS_CONSTRUCTION,Magnesium bars and sheets
+302619,CLASS,GS_CONSTRUCTION,Magnesium ingots strips billets and coil
+302620,CLASS,GS_CONSTRUCTION,Titanium bars and sheets
+302621,CLASS,GS_CONSTRUCTION,Titanium ingots strips billets and coil
+302622,CLASS,GS_CONSTRUCTION,Copper bars
+302623,CLASS,GS_CONSTRUCTION,Copper sheets
+302624,CLASS,GS_CONSTRUCTION,Copper ingots strip billets and coil
+302625,CLASS,GS_CONSTRUCTION,Bronze bars
+302626,CLASS,GS_CONSTRUCTION,Bronze sheets
+302627,CLASS,GS_CONSTRUCTION,Bronze ingots strips billets and coil
+302628,CLASS,GS_CONSTRUCTION,Zinc bars and sheets
+302629,CLASS,GS_CONSTRUCTION,Zinc ingots strips billets and coil
+302630,CLASS,GS_CONSTRUCTION,Tin bars
+302631,CLASS,GS_CONSTRUCTION,Tin sheet
+302632,CLASS,GS_CONSTRUCTION,Tin ingots strip and coil
+302633,CLASS,GS_CONSTRUCTION,Lead bars
+302634,CLASS,GS_CONSTRUCTION,Lead sheets
+302635,CLASS,GS_CONSTRUCTION,Lead ingots strips billets and coil
+302636,CLASS,GS_CONSTRUCTION,Carbon steel bars
+302637,CLASS,GS_CONSTRUCTION,Steel alloy bars
+302638,CLASS,GS_CONSTRUCTION,Tool steel bars
+302639,CLASS,GS_CONSTRUCTION,Specialty steel bars
+302640,CLASS,GS_CONSTRUCTION,Carbon steel sheets
+302641,CLASS,GS_CONSTRUCTION,Steel alloy sheets
+302642,CLASS,GS_CONSTRUCTION,Specialty steel sheets
+302643,CLASS,GS_CONSTRUCTION,Specialty steel coils
+302644,CLASS,GS_CONSTRUCTION,Carbon steel ingots strips billets and coil
+302645,CLASS,GS_CONSTRUCTION,Stainless steel bars
+302646,CLASS,GS_CONSTRUCTION,Stainless steel sheets
+302647,CLASS,GS_CONSTRUCTION,Stainless steel coil
+302648,CLASS,GS_CONSTRUCTION,Stainless steel strips
+302649,CLASS,GS_CONSTRUCTION,Aluminum bars
+302650,CLASS,GS_CONSTRUCTION,Aluminum sheets
+302651,CLASS,GS_CONSTRUCTION,Aluminum coil
+302652,CLASS,GS_CONSTRUCTION,Aluminum strips and ingots
+302653,CLASS,GS_CONSTRUCTION,Iron bars
+302654,CLASS,GS_CONSTRUCTION,Iron sheets
+302655,CLASS,GS_CONSTRUCTION,Iron ingots strips billets and coil
+302656,CLASS,GS_CONSTRUCTION,Ferrous alloy bars and sheets
+302657,CLASS,GS_CONSTRUCTION,Ferrous alloy ingots strips billets and coil
+302658,CLASS,GS_CONSTRUCTION,Plastic bars and sheets
+302659,CLASS,GS_CONSTRUCTION,Plastic coil and strips
+302660,CLASS,GS_CONSTRUCTION,Precious metal and specialty metal bars
+302661,CLASS,GS_CONSTRUCTION,Precious metal and specialty metal sheets
+302662,CLASS,GS_CONSTRUCTION,Precious metal and specialty metal coil strips billets and ingots
+302663,CLASS,GS_CONSTRUCTION,Wood structural materials
+302664,CLASS,GS_CONSTRUCTION,Specialty material bars and sheets
+302665,CLASS,GS_CONSTRUCTION,Specialty material coil strips billets and ingots
+302666,CLASS,GS_CONSTRUCTION,Nickel sheets and ingots
+302667,CLASS,GS_CONSTRUCTION,Shafting
+42318,CLASS,GS_CONSTRUCTION,Minerals
+42684,CLASS,GS_CONSTRUCTION,Ores
+43049,CLASS,GS_CONSTRUCTION,Base Metals
+43414,CLASS,GS_CONSTRUCTION,Precious metals
+43779,CLASS,GS_CONSTRUCTION,Intermediate processed and refined ore products
+42686,CLASS,GS_CONSTRUCTION,Wood
+44147,CLASS,GS_CONSTRUCTION,Engineered wood products
+311615,CLASS,GS_CONSTRUCTION,Screws
+311616,CLASS,GS_CONSTRUCTION,Bolts
+311617,CLASS,GS_CONSTRUCTION,Nuts
+311618,CLASS,GS_CONSTRUCTION,Washers
+311619,CLASS,GS_CONSTRUCTION,Springs
+311620,CLASS,GS_CONSTRUCTION,Nails
+311621,CLASS,GS_CONSTRUCTION,Anchors
+311622,CLASS,GS_CONSTRUCTION,Rivets
+42292,CLASS,GS_FOOD,Vegetable seeds and seedlings
+42658,CLASS,GS_FOOD,Cereal seeds
+503020,CLASS,GS_FOOD,Blackberries
+43388,CLASS,GS_FOOD,Spice crop seeds and seedlings
+43753,CLASS,GS_FOOD,Flower seeds and bulbs and seedlings and cuttings
+503021,CLASS,GS_FOOD,Bilberries
+503022,CLASS,GS_FOOD,Blueberries
+503023,CLASS,GS_FOOD,Breadfruit
+45214,CLASS,GS_FOOD,Legume seeds and seedlings
+45580,CLASS,GS_FOOD,Tuber seeds and seedlings
+503015,CLASS,GS_FOOD,Apples
+503016,CLASS,GS_FOOD,Apricots
+503017,CLASS,GS_FOOD,Bananas
+503018,CLASS,GS_FOOD,Barberries
+503019,CLASS,GS_FOOD,Bearberries
+503024,CLASS,GS_FOOD,Cherimoyas
+503025,CLASS,GS_FOOD,Cherries
+503026,CLASS,GS_FOOD,Citrons
+503027,CLASS,GS_FOOD,Cranberries
+503028,CLASS,GS_FOOD,Currants
+503029,CLASS,GS_FOOD,Dates
+503030,CLASS,GS_FOOD,Dragonfruit
+503031,CLASS,GS_FOOD,Figs
+503032,CLASS,GS_FOOD,Gooseberries
+503033,CLASS,GS_FOOD,Grapefruit
+503034,CLASS,GS_FOOD,Table grapes
+503035,CLASS,GS_FOOD,Raisin grapes
+503036,CLASS,GS_FOOD,Wine grapes
+503037,CLASS,GS_FOOD,Guavas
+503038,CLASS,GS_FOOD,Huckleberries
+503039,CLASS,GS_FOOD,Kiwi fruit
+503040,CLASS,GS_FOOD,Kumquats
+503041,CLASS,GS_FOOD,Lemons
+503042,CLASS,GS_FOOD,Limes
+503043,CLASS,GS_FOOD,Loquats
+503044,CLASS,GS_FOOD,Mandarin oranges or tangerines
+503045,CLASS,GS_FOOD,Mangoes
+503046,CLASS,GS_FOOD,Melons
+503047,CLASS,GS_FOOD,Mulberries
+503048,CLASS,GS_FOOD,Bayberries or myrtles
+503049,CLASS,GS_FOOD,Nectarines
+503050,CLASS,GS_FOOD,Oranges
+503051,CLASS,GS_FOOD,Papayas
+503052,CLASS,GS_FOOD,Passion fruit
+503053,CLASS,GS_FOOD,Peaches
+503054,CLASS,GS_FOOD,Pears
+503055,CLASS,GS_FOOD,Persimmons
+503056,CLASS,GS_FOOD,Pineapples
+503057,CLASS,GS_FOOD,Plucots
+503058,CLASS,GS_FOOD,Plums
+503059,CLASS,GS_FOOD,Pomegranates
+503060,CLASS,GS_FOOD,Pomelos
+503061,CLASS,GS_FOOD,Quinces
+503062,CLASS,GS_FOOD,Raspberries
+503063,CLASS,GS_FOOD,Rhubarb
+503064,CLASS,GS_FOOD,Rose hips
+503065,CLASS,GS_FOOD,Sapotes
+503066,CLASS,GS_FOOD,Saskatoon berries
+503067,CLASS,GS_FOOD,Strawberries
+503068,CLASS,GS_FOOD,Sugar apple
+503069,CLASS,GS_FOOD,Tamarillo
+503070,CLASS,GS_FOOD,Nominant fruits
+503071,CLASS,GS_FOOD,Chokeberries
+503072,CLASS,GS_FOOD,Olives
+503075,CLASS,GS_FOOD,Fresh fruit byproducts
+503215,CLASS,GS_FOOD,Dried apples
+503216,CLASS,GS_FOOD,Dried apricots
+503217,CLASS,GS_FOOD,Dried bananas
+503218,CLASS,GS_FOOD,Dried barberries
+503219,CLASS,GS_FOOD,Dried bearberries
+503220,CLASS,GS_FOOD,Dried blackberries
+503221,CLASS,GS_FOOD,Dried bilberries
+503222,CLASS,GS_FOOD,Dried blueberries
+503223,CLASS,GS_FOOD,Dried breadfruit
+503224,CLASS,GS_FOOD,Dried cherimoyas
+503225,CLASS,GS_FOOD,Dried cherries
+503226,CLASS,GS_FOOD,Dried citrons
+503227,CLASS,GS_FOOD,Dried cranberries
+503228,CLASS,GS_FOOD,Dried currants
+503229,CLASS,GS_FOOD,Dried dates
+503230,CLASS,GS_FOOD,Dried dragonfruit
+503231,CLASS,GS_FOOD,Dried figs
+503232,CLASS,GS_FOOD,Dried gooseberries
+503233,CLASS,GS_FOOD,Dried grapefruit
+503234,CLASS,GS_FOOD,Dried table grapes
+503235,CLASS,GS_FOOD,Dried raisin grapes
+503236,CLASS,GS_FOOD,Dried wine grapes
+503237,CLASS,GS_FOOD,Dried guavas
+503238,CLASS,GS_FOOD,Dried huckleberries
+503239,CLASS,GS_FOOD,Dried kiwi fruit
+503240,CLASS,GS_FOOD,Dried kumquats
+503241,CLASS,GS_FOOD,Dried lemons
+503242,CLASS,GS_FOOD,Dried limes
+503243,CLASS,GS_FOOD,Dried loquats
+503244,CLASS,GS_FOOD,Dried mandarin oranges or tangerines
+503245,CLASS,GS_FOOD,Dried mangoes
+503246,CLASS,GS_FOOD,Dried melons
+503247,CLASS,GS_FOOD,Dried mulberries
+503248,CLASS,GS_FOOD,Dried myrtle
+503249,CLASS,GS_FOOD,Dried nectarines
+503250,CLASS,GS_FOOD,Dried oranges
+503251,CLASS,GS_FOOD,Dried papayas
+503252,CLASS,GS_FOOD,Dried passion fruit
+503253,CLASS,GS_FOOD,Dried peaches
+503254,CLASS,GS_FOOD,Dried pears
+503255,CLASS,GS_FOOD,Dried persimmons
+503256,CLASS,GS_FOOD,Dried pineapples
+503257,CLASS,GS_FOOD,Dried plucots
+503258,CLASS,GS_FOOD,Dried plums
+503259,CLASS,GS_FOOD,Dried pomegranates
+503260,CLASS,GS_FOOD,Dried pomelos
+503261,CLASS,GS_FOOD,Dried quinces
+503262,CLASS,GS_FOOD,Dried raspberries
+503263,CLASS,GS_FOOD,Dried rhubarb
+503264,CLASS,GS_FOOD,Dried rose hips
+503265,CLASS,GS_FOOD,Dried sapotes
+503266,CLASS,GS_FOOD,Dried saskatoon berries
+503267,CLASS,GS_FOOD,Dried strawberries
+503268,CLASS,GS_FOOD,Dried sugar apple
+503269,CLASS,GS_FOOD,Dried tamarillo
+503270,CLASS,GS_FOOD,Dried nominant fruits
+503271,CLASS,GS_FOOD,Dried chokeberries
+503272,CLASS,GS_FOOD,Dried olives
+503415,CLASS,GS_FOOD,Frozen apples
+503416,CLASS,GS_FOOD,Frozen apricots
+503417,CLASS,GS_FOOD,Frozen bananas
+503418,CLASS,GS_FOOD,Frozen barberries
+503419,CLASS,GS_FOOD,Frozen bearberries
+503420,CLASS,GS_FOOD,Frozen blackberries
+503421,CLASS,GS_FOOD,Frozen bilberries
+503422,CLASS,GS_FOOD,Frozen blueberries
+503423,CLASS,GS_FOOD,Frozen breadfruit
+503424,CLASS,GS_FOOD,Frozen cherimoyas
+503425,CLASS,GS_FOOD,Frozen cherries
+503426,CLASS,GS_FOOD,Frozen citrons
+503427,CLASS,GS_FOOD,Frozen cranberries
+503428,CLASS,GS_FOOD,Frozen currants
+503429,CLASS,GS_FOOD,Frozen dates
+503430,CLASS,GS_FOOD,Frozen dragonfruit
+503431,CLASS,GS_FOOD,Frozen figs
+503432,CLASS,GS_FOOD,Frozen gooseberries
+503433,CLASS,GS_FOOD,Frozen grapefruit
+503434,CLASS,GS_FOOD,Frozen table grapes
+503435,CLASS,GS_FOOD,Frozen raisin grapes
+503436,CLASS,GS_FOOD,Frozen wine grapes
+503437,CLASS,GS_FOOD,Frozen guavas
+503438,CLASS,GS_FOOD,Frozen huckleberries
+503439,CLASS,GS_FOOD,Frozen kiwi fruit
+503440,CLASS,GS_FOOD,Frozen kumquats
+503441,CLASS,GS_FOOD,Frozen lemons
+503442,CLASS,GS_FOOD,Frozen limes
+503443,CLASS,GS_FOOD,Frozen loquats
+503444,CLASS,GS_FOOD,Frozen mandarin oranges or tangerines
+503445,CLASS,GS_FOOD,Frozen mangoes
+503446,CLASS,GS_FOOD,Frozen melons
+503447,CLASS,GS_FOOD,Frozen mulberries
+503448,CLASS,GS_FOOD,Frozen bayberries or myrtle
+503449,CLASS,GS_FOOD,Frozen nectarines
+503450,CLASS,GS_FOOD,Frozen oranges
+503451,CLASS,GS_FOOD,Frozen papayas
+503452,CLASS,GS_FOOD,Frozen passion fruit
+503453,CLASS,GS_FOOD,Frozen peaches
+503454,CLASS,GS_FOOD,Frozen pears
+503455,CLASS,GS_FOOD,Frozen persimmons
+503456,CLASS,GS_FOOD,Frozen pineapples
+503457,CLASS,GS_FOOD,Frozen plucots
+503458,CLASS,GS_FOOD,Frozen plums
+503459,CLASS,GS_FOOD,Frozen pomegranates
+503460,CLASS,GS_FOOD,Frozen pomelos
+503461,CLASS,GS_FOOD,Frozen quinces
+503462,CLASS,GS_FOOD,Frozen raspberries
+503463,CLASS,GS_FOOD,Frozen rhubarb
+503464,CLASS,GS_FOOD,Frozen rose hips
+503465,CLASS,GS_FOOD,Frozen sapotes
+503466,CLASS,GS_FOOD,Frozen saskatoon berries
+503467,CLASS,GS_FOOD,Frozen strawberries
+503468,CLASS,GS_FOOD,Frozen sugar apple
+503469,CLASS,GS_FOOD,Frozen tamarillo
+503470,CLASS,GS_FOOD,Frozen nominant fruits
+503471,CLASS,GS_FOOD,Frozen chokeberries
+503472,CLASS,GS_FOOD,Frozen olives
+503615,CLASS,GS_FOOD,Canned or jarred apples
+503616,CLASS,GS_FOOD,Canned or jarred apricots
+503617,CLASS,GS_FOOD,Canned or jarred bananas
+503618,CLASS,GS_FOOD,Canned or jarred barberries
+503619,CLASS,GS_FOOD,Canned or jarred bearberries
+503620,CLASS,GS_FOOD,Canned or jarred blackberries
+503621,CLASS,GS_FOOD,Canned or jarred bilberries
+503622,CLASS,GS_FOOD,Canned or jarred blueberries
+503623,CLASS,GS_FOOD,Canned or jarred breadfruit
+503624,CLASS,GS_FOOD,Canned or jarred cherimoyas
+503625,CLASS,GS_FOOD,Canned or jarred cherries
+503626,CLASS,GS_FOOD,Canned or jarred citrons
+503627,CLASS,GS_FOOD,Canned or jarred cranberries
+503628,CLASS,GS_FOOD,Canned or jarred currants
+503629,CLASS,GS_FOOD,Canned or jarred dates
+503630,CLASS,GS_FOOD,Canned or jarred dragonfruit
+503631,CLASS,GS_FOOD,Canned or jarred figs
+503632,CLASS,GS_FOOD,Canned or jarred gooseberries
+503633,CLASS,GS_FOOD,Canned or jarred grapefruit
+503634,CLASS,GS_FOOD,Canned or jarred table grapes
+503635,CLASS,GS_FOOD,Canned or jarred raisin grapes
+503636,CLASS,GS_FOOD,Canned or jarred wine grapes
+503637,CLASS,GS_FOOD,Canned or jarred guavas
+503638,CLASS,GS_FOOD,Canned or jarred huckleberries
+503639,CLASS,GS_FOOD,Canned or jarred kiwi fruit
+503640,CLASS,GS_FOOD,Canned or jarred kumquats
+503641,CLASS,GS_FOOD,Canned or jarred lemons
+503642,CLASS,GS_FOOD,Canned or jarred limes
+503643,CLASS,GS_FOOD,Canned or jarred loquats
+503644,CLASS,GS_FOOD,Canned or jarred mandarin oranges or tangerines
+503645,CLASS,GS_FOOD,Canned or jarred mangoes
+503646,CLASS,GS_FOOD,Canned or jarred melons
+503647,CLASS,GS_FOOD,Canned or jarred mulberries
+503648,CLASS,GS_FOOD,Canned or jarred bayberries or myrtles
+503649,CLASS,GS_FOOD,Canned or jarred nectarines
+503650,CLASS,GS_FOOD,Canned or jarred oranges
+503651,CLASS,GS_FOOD,Canned or jarred papayas
+503652,CLASS,GS_FOOD,Canned or jarred passion fruit
+503653,CLASS,GS_FOOD,Canned or jarred peaches
+503654,CLASS,GS_FOOD,Canned or jarred pears
+503655,CLASS,GS_FOOD,Canned or jarred persimmons
+503656,CLASS,GS_FOOD,Canned or jarred pineapples
+503657,CLASS,GS_FOOD,Canned or jarred plucots
+503658,CLASS,GS_FOOD,Canned or jarred plums
+503659,CLASS,GS_FOOD,Canned or jarred pomegranates
+503660,CLASS,GS_FOOD,Canned or jarred pomelos
+503661,CLASS,GS_FOOD,Canned or jarred quinces
+503662,CLASS,GS_FOOD,Canned or jarred raspberries
+503663,CLASS,GS_FOOD,Canned or jarred rhubarb
+503664,CLASS,GS_FOOD,Canned or jarred rose hips
+503665,CLASS,GS_FOOD,Canned or jarred sapotes
+503666,CLASS,GS_FOOD,Canned or jarred saskatoon berries
+503667,CLASS,GS_FOOD,Canned or jarred strawberries
+503668,CLASS,GS_FOOD,Canned or jarred sugar apple
+503669,CLASS,GS_FOOD,Canned or jarred tamarillo
+503670,CLASS,GS_FOOD,Canned or jarred nominant fruits
+503671,CLASS,GS_FOOD,Canned or jarred chokeberries
+503672,CLASS,GS_FOOD,Canned or jarred olives
+503819,CLASS,GS_FOOD,Apple purees
+503820,CLASS,GS_FOOD,Apricot purees
+503821,CLASS,GS_FOOD,Banana purees
+503822,CLASS,GS_FOOD,Barberry purees
+503823,CLASS,GS_FOOD,Bearberry purees
+503824,CLASS,GS_FOOD,Blackberry purees
+503825,CLASS,GS_FOOD,Bilberry purees
+503826,CLASS,GS_FOOD,Blueberry purees
+503827,CLASS,GS_FOOD,Breadfruit purees
+503828,CLASS,GS_FOOD,Cherimoyas purees
+503829,CLASS,GS_FOOD,Cherry purees
+503830,CLASS,GS_FOOD,Citron purees
+503831,CLASS,GS_FOOD,Cranberry purees
+503832,CLASS,GS_FOOD,Currant purees
+503833,CLASS,GS_FOOD,Date purees
+503834,CLASS,GS_FOOD,Dragonfruit purees
+503835,CLASS,GS_FOOD,Fig purees
+503836,CLASS,GS_FOOD,Gooseberry purees
+503837,CLASS,GS_FOOD,Grapefruit purees
+503838,CLASS,GS_FOOD,Table grape purees
+503839,CLASS,GS_FOOD,Wine grape purees
+503840,CLASS,GS_FOOD,Raisin grape purees
+503841,CLASS,GS_FOOD,Guava purees
+503842,CLASS,GS_FOOD,Huckleberry purees
+503843,CLASS,GS_FOOD,Kiwi fruit purees
+503844,CLASS,GS_FOOD,Kumquat purees
+503845,CLASS,GS_FOOD,Lemon purees
+503846,CLASS,GS_FOOD,Lime purees
+503847,CLASS,GS_FOOD,Loquat purees
+503848,CLASS,GS_FOOD,Mandarin oranges or tangerine purees
+503849,CLASS,GS_FOOD,Tangelo purees
+503850,CLASS,GS_FOOD,Mango purees
+503851,CLASS,GS_FOOD,Melon purees
+503852,CLASS,GS_FOOD,Mulberry purees
+503853,CLASS,GS_FOOD,Bayberry and myrtle purees
+503854,CLASS,GS_FOOD,Nectarine purees
+503855,CLASS,GS_FOOD,Orange purees
+503856,CLASS,GS_FOOD,Papaya purees
+503857,CLASS,GS_FOOD,Passion fruit purees
+503858,CLASS,GS_FOOD,Peach purees
+503859,CLASS,GS_FOOD,Pear purees
+503860,CLASS,GS_FOOD,Persimmon purees
+503861,CLASS,GS_FOOD,Pineapple purees
+503862,CLASS,GS_FOOD,Plucot purees
+503863,CLASS,GS_FOOD,Plum purees
+503864,CLASS,GS_FOOD,Pomegranate purees
+503865,CLASS,GS_FOOD,Pomelo purees
+503866,CLASS,GS_FOOD,Quince purees
+503867,CLASS,GS_FOOD,Raspberry purees
+503868,CLASS,GS_FOOD,Rhubarb purees
+503869,CLASS,GS_FOOD,Rose hip purees
+503870,CLASS,GS_FOOD,Sapote purees
+503871,CLASS,GS_FOOD,Saskatoon berry purees
+503872,CLASS,GS_FOOD,Strawberry purees
+503873,CLASS,GS_FOOD,Sugar apple purees
+503874,CLASS,GS_FOOD,Tamarillo purees
+503875,CLASS,GS_FOOD,Nominant fruit purees
+503876,CLASS,GS_FOOD,Chokeberry purees
+503877,CLASS,GS_FOOD,Olive purees
+504015,CLASS,GS_FOOD,Artichokes
+504016,CLASS,GS_FOOD,Asparagus
+504017,CLASS,GS_FOOD,Avocados
+504018,CLASS,GS_FOOD,Beans
+504019,CLASS,GS_FOOD,Beets
+504020,CLASS,GS_FOOD,Broccoli
+504021,CLASS,GS_FOOD,Brussel sprouts
+504022,CLASS,GS_FOOD,Bunching onions
+504023,CLASS,GS_FOOD,Cabbages
+504024,CLASS,GS_FOOD,Cardoons
+504025,CLASS,GS_FOOD,Carrots
+504026,CLASS,GS_FOOD,Cauliflowers
+504027,CLASS,GS_FOOD,Celery
+504028,CLASS,GS_FOOD,Chards
+504029,CLASS,GS_FOOD,Chicories
+504030,CLASS,GS_FOOD,Chinese cabbages
+504031,CLASS,GS_FOOD,Chives
+504032,CLASS,GS_FOOD,Corn
+504033,CLASS,GS_FOOD,Cresses
+504034,CLASS,GS_FOOD,Cucumbers
+504035,CLASS,GS_FOOD,Eggplants
+504036,CLASS,GS_FOOD,Endives
+504037,CLASS,GS_FOOD,Fennels
+504038,CLASS,GS_FOOD,Garlics
+504039,CLASS,GS_FOOD,Gourds
+504040,CLASS,GS_FOOD,Green peas
+504041,CLASS,GS_FOOD,Herbs
+504042,CLASS,GS_FOOD,Kale
+504043,CLASS,GS_FOOD,Kohlrabi
+504044,CLASS,GS_FOOD,Leeks
+504045,CLASS,GS_FOOD,Lentils
+504046,CLASS,GS_FOOD,Lettuces
+504047,CLASS,GS_FOOD,Malanga
+504048,CLASS,GS_FOOD,Mushrooms
+504049,CLASS,GS_FOOD,Mustards
+504051,CLASS,GS_FOOD,Nightshades
+504052,CLASS,GS_FOOD,Okras
+504053,CLASS,GS_FOOD,Onions
+504054,CLASS,GS_FOOD,Peas
+504055,CLASS,GS_FOOD,Peanuts
+504056,CLASS,GS_FOOD,Peppers
+504057,CLASS,GS_FOOD,Potatoes
+504058,CLASS,GS_FOOD,Rutabagas
+504059,CLASS,GS_FOOD,Sea vegetables
+504060,CLASS,GS_FOOD,Shallots
+504061,CLASS,GS_FOOD,Sorrels
+504062,CLASS,GS_FOOD,Spinaches
+504063,CLASS,GS_FOOD,Summer squashes and summer pumpkins
+504064,CLASS,GS_FOOD,Sweet potatoes
+504065,CLASS,GS_FOOD,Tomatoes
+504066,CLASS,GS_FOOD,Turnip greens
+504067,CLASS,GS_FOOD,Winter squashes and winter pumpkins
+504068,CLASS,GS_FOOD,Yams
+504070,CLASS,GS_FOOD,Nominant vegetables
+504071,CLASS,GS_FOOD,Sugar peas
+504072,CLASS,GS_FOOD,Tubers
+504215,CLASS,GS_FOOD,Dried artichokes
+504216,CLASS,GS_FOOD,Dried asparagus
+504217,CLASS,GS_FOOD,Dried avocados
+504218,CLASS,GS_FOOD,Dried beans
+504219,CLASS,GS_FOOD,Dried beets
+504220,CLASS,GS_FOOD,Dried broccoli
+504221,CLASS,GS_FOOD,Dried brussel sprouts
+504222,CLASS,GS_FOOD,Dried bunching onions
+504223,CLASS,GS_FOOD,Dried cabbages
+504224,CLASS,GS_FOOD,Dried cardoons
+504225,CLASS,GS_FOOD,Dried carrots
+504226,CLASS,GS_FOOD,Dried cauliflowers
+504227,CLASS,GS_FOOD,Dried celery
+504228,CLASS,GS_FOOD,Dried chards
+504229,CLASS,GS_FOOD,Dried chicories
+504230,CLASS,GS_FOOD,Dried chinese cabbages
+504231,CLASS,GS_FOOD,Dried chives
+504232,CLASS,GS_FOOD,Dried corn
+504233,CLASS,GS_FOOD,Dried cresses
+504234,CLASS,GS_FOOD,Dried cucumbers
+504235,CLASS,GS_FOOD,Dried eggplants
+504236,CLASS,GS_FOOD,Dried endives
+504237,CLASS,GS_FOOD,Dried fennels
+504238,CLASS,GS_FOOD,Dried garlics
+504239,CLASS,GS_FOOD,Dried gourds
+504240,CLASS,GS_FOOD,Dried green peas
+504241,CLASS,GS_FOOD,Dried herbs
+504242,CLASS,GS_FOOD,Dried kale
+504243,CLASS,GS_FOOD,Dried kohlrabi
+504244,CLASS,GS_FOOD,Dried leeks
+504245,CLASS,GS_FOOD,Dried lentils
+504246,CLASS,GS_FOOD,Dried lettuces
+504247,CLASS,GS_FOOD,Dried malanga
+504248,CLASS,GS_FOOD,Dried mushrooms
+504249,CLASS,GS_FOOD,Dried mustards
+504250,CLASS,GS_FOOD,Dried nightshades
+504251,CLASS,GS_FOOD,Dried okras
+504252,CLASS,GS_FOOD,Dried onions
+504253,CLASS,GS_FOOD,Dried peanuts
+504254,CLASS,GS_FOOD,Dried peas
+504255,CLASS,GS_FOOD,Dried peppers
+504256,CLASS,GS_FOOD,Dried potatoes
+504257,CLASS,GS_FOOD,Dried rutabagas
+504258,CLASS,GS_FOOD,Dried sea vegetables
+504259,CLASS,GS_FOOD,Dried shallots
+504260,CLASS,GS_FOOD,Dried sorrels
+504261,CLASS,GS_FOOD,Dried spinaches
+504262,CLASS,GS_FOOD,Dried summer squashes and summer pumpkins
+504263,CLASS,GS_FOOD,Dried sweet potatoes
+504264,CLASS,GS_FOOD,Dried tomatoes
+504265,CLASS,GS_FOOD,Dried turnip greens
+504266,CLASS,GS_FOOD,Dried winter squashes and winter pumpkins
+504267,CLASS,GS_FOOD,Dried yams
+504268,CLASS,GS_FOOD,Dried nominant vegetables
+504269,CLASS,GS_FOOD,Dried sugar peas
+504615,CLASS,GS_FOOD,Canned or jarred artichokes
+504616,CLASS,GS_FOOD,Canned or jarred asparagus
+504617,CLASS,GS_FOOD,Canned or jarred avocados
+504618,CLASS,GS_FOOD,Canned or jarred beans
+504619,CLASS,GS_FOOD,Canned or jarred beets
+504620,CLASS,GS_FOOD,Canned or jarred broccoli
+504621,CLASS,GS_FOOD,Canned or jarred brussel sprouts
+504622,CLASS,GS_FOOD,Canned or jarred bunching onions
+504623,CLASS,GS_FOOD,Canned or jarred cabbages
+504624,CLASS,GS_FOOD,Canned or jarred cardoons
+504625,CLASS,GS_FOOD,Canned or jarred carrots
+504626,CLASS,GS_FOOD,Canned or jarred cauliflowers
+504627,CLASS,GS_FOOD,Canned or jarred celery
+504628,CLASS,GS_FOOD,Canned or jarred chards
+504629,CLASS,GS_FOOD,Canned or jarred chicories
+504630,CLASS,GS_FOOD,Canned or jarred chinese cabbages
+504631,CLASS,GS_FOOD,Canned or jarred chives
+504632,CLASS,GS_FOOD,Canned or jarred corn
+504633,CLASS,GS_FOOD,Canned or jarred cresses
+504634,CLASS,GS_FOOD,Canned or jarred cucumbers
+504635,CLASS,GS_FOOD,Canned or jarred eggplants
+504636,CLASS,GS_FOOD,Canned or jarred endives
+504637,CLASS,GS_FOOD,Canned or jarred fennels
+504638,CLASS,GS_FOOD,Canned or jarred garlics
+504639,CLASS,GS_FOOD,Canned or jarred gourds
+504640,CLASS,GS_FOOD,Canned or jarred green peas
+504641,CLASS,GS_FOOD,Canned or jarred herbs
+504642,CLASS,GS_FOOD,Canned or jarred kale
+504643,CLASS,GS_FOOD,Canned or jarred kohlrabi
+504644,CLASS,GS_FOOD,Canned or jarred leeks
+504645,CLASS,GS_FOOD,Canned or jarred lentils
+504646,CLASS,GS_FOOD,Canned or jarred lettuces
+504647,CLASS,GS_FOOD,Canned or jarred malanga
+504648,CLASS,GS_FOOD,Canned or jarred mushrooms
+504649,CLASS,GS_FOOD,Canned or jarred mustards
+504650,CLASS,GS_FOOD,Canned or jarred nightshades
+504651,CLASS,GS_FOOD,Canned or jarred okras
+504652,CLASS,GS_FOOD,Canned or jarred onions
+504653,CLASS,GS_FOOD,Canned or jarred peanuts
+504654,CLASS,GS_FOOD,Canned or jarred peas
+504655,CLASS,GS_FOOD,Canned or jarred peppers
+504656,CLASS,GS_FOOD,Canned or jarred potatoes
+504657,CLASS,GS_FOOD,Canned or jarred rutabagas
+504658,CLASS,GS_FOOD,Canned or jarred sea vegetables
+504659,CLASS,GS_FOOD,Canned or jarred shallots
+504660,CLASS,GS_FOOD,Canned or jarred sorrels
+504661,CLASS,GS_FOOD,Canned or jarred spinaches
+504662,CLASS,GS_FOOD,Canned or jarred summer squashes and summer pumpkins
+504663,CLASS,GS_FOOD,Canned or jarred sweet potatoes
+504664,CLASS,GS_FOOD,Canned or jarred tomatoes
+504665,CLASS,GS_FOOD,Canned or jarred turnip greens
+504666,CLASS,GS_FOOD,Canned or jarred winter squashes and winter pumpkins
+504667,CLASS,GS_FOOD,Canned or jarred yams
+504668,CLASS,GS_FOOD,Canned or jarred nominant vegetables
+504669,CLASS,GS_FOOD,Canned or jarred sugar peas
+504670,CLASS,GS_FOOD,Canned or jarred kimchis
+504415,CLASS,GS_FOOD,Frozen artichokes
+504416,CLASS,GS_FOOD,Frozen asparagus
+504417,CLASS,GS_FOOD,Frozen avocados
+504418,CLASS,GS_FOOD,Frozen beans
+504419,CLASS,GS_FOOD,Frozen beets
+504420,CLASS,GS_FOOD,Frozen broccoli
+504421,CLASS,GS_FOOD,Frozen brussel sprouts
+504422,CLASS,GS_FOOD,Frozen bunching onions
+504423,CLASS,GS_FOOD,Frozen cabbages
+504424,CLASS,GS_FOOD,Frozen cardoons
+504425,CLASS,GS_FOOD,Frozen carrots
+504426,CLASS,GS_FOOD,Frozen cauliflowers
+504427,CLASS,GS_FOOD,Frozen celery
+504428,CLASS,GS_FOOD,Frozen chards
+504429,CLASS,GS_FOOD,Frozen chicories
+504430,CLASS,GS_FOOD,Frozen chinese cabbages
+504431,CLASS,GS_FOOD,Frozen chives
+504432,CLASS,GS_FOOD,Frozen corn
+504433,CLASS,GS_FOOD,Frozen cresses
+504434,CLASS,GS_FOOD,Frozen cucumbers
+504435,CLASS,GS_FOOD,Frozen eggplants
+504436,CLASS,GS_FOOD,Frozen endives
+504437,CLASS,GS_FOOD,Frozen fennels
+504438,CLASS,GS_FOOD,Frozen garlics
+504439,CLASS,GS_FOOD,Frozen gourds
+504440,CLASS,GS_FOOD,Frozen green peas
+504441,CLASS,GS_FOOD,Frozen herbs
+504442,CLASS,GS_FOOD,Frozen kale
+504443,CLASS,GS_FOOD,Frozen kohlrabi
+504444,CLASS,GS_FOOD,Frozen leeks
+504445,CLASS,GS_FOOD,Frozen lentils
+504446,CLASS,GS_FOOD,Frozen lettuces
+504447,CLASS,GS_FOOD,Frozen malanga
+504448,CLASS,GS_FOOD,Frozen mushrooms
+504449,CLASS,GS_FOOD,Frozen mustards
+504450,CLASS,GS_FOOD,Frozen nightshades
+504451,CLASS,GS_FOOD,Frozen okras
+504452,CLASS,GS_FOOD,Frozen onions
+504453,CLASS,GS_FOOD,Frozen peanuts
+504454,CLASS,GS_FOOD,Frozen peas
+504455,CLASS,GS_FOOD,Frozen peppers
+504456,CLASS,GS_FOOD,Frozen potatoes
+504457,CLASS,GS_FOOD,Frozen rutabagas
+504458,CLASS,GS_FOOD,Frozen sea vegetables
+504459,CLASS,GS_FOOD,Frozen shallots
+504460,CLASS,GS_FOOD,Frozen sorrels
+504461,CLASS,GS_FOOD,Frozen spinaches
+504462,CLASS,GS_FOOD,Frozen summer squashes and summer pumpkins
+504463,CLASS,GS_FOOD,Frozen sweet potatoes
+504464,CLASS,GS_FOOD,Frozen tomatoes
+504465,CLASS,GS_FOOD,Frozen turnip greens
+504466,CLASS,GS_FOOD,Frozen winter squashes and winter pumpkins
+504467,CLASS,GS_FOOD,Frozen yams
+504468,CLASS,GS_FOOD,Frozen nominant vegetables
+504469,CLASS,GS_FOOD,Frozen sugar peas
+431916,CLASS,GS_ELECTRONICS,Personal communications device accessories or parts
+432021,CLASS,GS_ELECTRONICS,Removable storage media accessories
+432022,CLASS,GS_ELECTRONICS,Sub assemblies for electronic devices
+301623,CLASS,GS_CONSTRUCTION,Cabinet accessories
+301220,CLASS,GS_CONSTRUCTION,Specialized external flooring and paving materials
+301816,CLASS,GS_CONSTRUCTION,Non sanitary residential fixtures
+301817,CLASS,GS_CONSTRUCTION,Faucets or taps
+301818,CLASS,GS_CONSTRUCTION,"Faucet and shower heads, jets and parts and accessories"
+42319,CLASS,GS_CONSTRUCTION,Dirt and soil
+42685,CLASS,GS_CONSTRUCTION,Stone
+43050,CLASS,GS_CONSTRUCTION,Sand
+43415,CLASS,GS_CONSTRUCTION,Clays
+43780,CLASS,GS_CONSTRUCTION,Decorative rock
+42320,CLASS,GS_CONSTRUCTION,Sap
+43051,CLASS,GS_CONSTRUCTION,Forestry byproducts
+43416,CLASS,GS_CONSTRUCTION,Plant fibers
+43781,CLASS,GS_CONSTRUCTION,Perfumery products
+42321,CLASS,GS_CONSTRUCTION,Animal hides and skins and animal textile materials
+42687,CLASS,GS_CONSTRUCTION,Other animal products
+502033,CLASS,GS_FOOD,Fast moving consumer goods
+502115,CLASS,GS_FOOD,Tobacco and substitutes
+502116,CLASS,GS_FOOD,Tobacco product accessories and supplies
+43023,CLASS,GS_FOOD,Grass and forage seeds and seedlings
+44119,CLASS,GS_FOOD,Tree and shrub seeds and cuttings
+44484,CLASS,GS_FOOD,Residues other than animal feed
+44849,CLASS,GS_FOOD,Fibrous crop seeds and seedlings
+432116,CLASS,GS_ELECTRONICS,Computer accessories
+432119,CLASS,GS_ELECTRONICS,Computer displays
+432121,CLASS,GS_ELECTRONICS,Computer printers
+314119,CLASS,GS_PACKAGING,Molded seals
+241415,CLASS,GS_PACKAGING,Securing and protecting supplies
+241416,CLASS,GS_PACKAGING,Cushioning supplies
+241417,CLASS,GS_PACKAGING,Packaging tubes and cores and labels and accessories
+241215,CLASS,GS_PACKAGING,Packaging boxes and bags and pouches
+241218,CLASS,GS_PACKAGING,Packaging cans
+241220,CLASS,GS_PACKAGING,Bottles or vials
+141215,CLASS,GS_PACKAGING,Paperboard and packaging papers
+131015,CLASS,GS_PACKAGING,Natural rubber
+131016,CLASS,GS_PACKAGING,Processed and synthetic rubber
+131017,CLASS,GS_PACKAGING,Elastomers
+131019,CLASS,GS_PACKAGING,Thermoset plastics
+131020,CLASS,GS_PACKAGING,Thermoplastic plastics
+131110,CLASS,GS_PACKAGING,Resins
+131111,CLASS,GS_PACKAGING,Rosins
+131112,CLASS,GS_PACKAGING,Plastic films
+131113,CLASS,GS_PACKAGING,Foams
+241115,CLASS,GS_PACKAGING,Bags
+241118,CLASS,GS_PACKAGING,Tanks and cylinders and their accessories
+241120,CLASS,GS_PACKAGING,Bins and baskets
+241121,CLASS,GS_PACKAGING,Casks and barrels and drums
+241122,CLASS,GS_PACKAGING,Cans and pails
+241124,CLASS,GS_PACKAGING,Storage chests and cabinets and trunks
+241125,CLASS,GS_PACKAGING,Corrugated and other supplies for distribution
+241126,CLASS,GS_PACKAGING,Liquid containers
+241127,CLASS,GS_PACKAGING,Pallets
+241128,CLASS,GS_PACKAGING,Freight containers
+241129,CLASS,GS_PACKAGING,Crates
+241130,CLASS,GS_PACKAGING,Slip sheets
+241131,CLASS,GS_PACKAGING,Boxes

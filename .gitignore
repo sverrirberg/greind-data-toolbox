@@ -1,0 +1,51 @@
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Model + data files
+*.pkl
+*.csv
+
+# Logs + feedback
+logs/
+*.log
+
+# System files
+.DS_Store
+
+# Jupyter + notebook checkpoints
+.ipynb_checkpoints/
+
+# VS Code settings
+.vscode/
+
+# Virtual environment
+.venv/
+
+# macOS
+.DS_Store
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Streamlit logs
+.streamlit/
+
+# Jupyter & profiler outputs
+.ipynb_checkpoints/
+*.html
+
+# Model & data files
+*.pkl
+*.log
+feedback_logs/
+datasets/

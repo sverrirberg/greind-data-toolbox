@@ -77,6 +77,28 @@ if mode == "🔍 UNSPSC Prediction":
                     "confidence": f"{conf:.2%}",
                     "correct_code": ""
                 })
+elif tool == "CSV Profiler":
+    st.header("📊 CSV Profiler")
+
+    profiling_file = st.file_uploader("Upload a CSV file for profiling", type=["csv"])
+
+    if profiling_file:
+        df = pd.read_csv(profiling_file)
+        st.write("✅ File loaded. Generating profiling report...")
+
+        profile = ProfileReport(df, title="📊 Data Profiling Report", explorative=True)
+        st_profile_report(profile)
+
+        # Save the HTML report to a temporary file and offer download
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp_file:
+            profile.to_file(tmp_file.name)
+            tmp_file.seek(0)
+            st.download_button(
+                label="📥 Download HTML Report",
+                data=tmp_file.read(),
+                file_name="data_profile_report.html",
+                mime="text/html"
+            )
 
             result_df = pd.DataFrame(results)
             st.success("✅ Predictions complete!")
@@ -121,3 +143,24 @@ with st.expander("⚙️ Admin Tools"):
             else:
                 st.error(f"❌ Retraining failed:\n{result.stderr}")
 
+import tempfile
+import streamlit as st
+from ydata_profiling import ProfileReport
+from streamlit_pandas_profiling import st_profile_report
+
+# After reading the uploaded CSV into `df`:
+if profiling_file:
+    df = pd.read_csv(profiling_file)
+    profile = ProfileReport(df, title="Data Profiling Report", explorative=True)
+    st_profile_report(profile)
+
+    # Save to a temporary HTML file
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp_file:
+        profile.to_file(tmp_file.name)
+        tmp_file.seek(0)
+        st.download_button(
+            label="📥 Download HTML Report",
+            data=tmp_file.read(),
+            file_name="data_profile_report.html",
+            mime="text/html"
+        )

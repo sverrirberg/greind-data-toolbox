@@ -7,8 +7,10 @@ from ydata_profiling import ProfileReport
 from streamlit_pandas_profiling import st_profile_report
 import os
 import datetime
+import tempfile
+import subprocess
 
-st.set_page_config(page_title="UNSPSC Toolkit", layout="wide")
+st.set_page_config(page_title="Klappir Data Toolbox", layout="wide")
 st.title("🛠️ Klappir Data Toolbox")
 
 # --- Caching ---
@@ -57,9 +59,10 @@ def log_feedback(description, predicted_code, correct_code):
 # --- Sidebar Menu ---
 mode = st.sidebar.radio("Choose a Tool:", ["🔍 UNSPSC Prediction", "🧪 CSV Profiling (YData)"])
 
+# === UNSPSC Prediction ===
 if mode == "🔍 UNSPSC Prediction":
     st.header("🔍 Predict UNSPSC Code")
-    uploaded_file = st.file_uploader("Upload a CSV with a 'description' column", type=["csv"])
+    uploaded_file = st.file_uploader("Upload a CSV with a 'description' column", type=["csv"], key="unspsc")
 
     if uploaded_file:
         df = pd.read_csv(uploaded_file)
@@ -77,19 +80,39 @@ if mode == "🔍 UNSPSC Prediction":
                     "confidence": f"{conf:.2%}",
                     "correct_code": ""
                 })
-elif tool == "CSV Profiler":
-    st.header("📊 CSV Profiler")
 
-    profiling_file = st.file_uploader("Upload a CSV file for profiling", type=["csv"])
+            result_df = pd.DataFrame(results)
+            st.success("✅ Predictions complete!")
+            st.dataframe(result_df, use_container_width=True)
+
+            csv = result_df.to_csv(index=False).encode("utf-8")
+            st.download_button("📥 Download Predictions", csv, "predictions.csv", "text/csv")
+
+    st.subheader("Or enter a single description below")
+    input_text = st.text_area("Procurement Description:")
+    if input_text:
+        code, desc, conf = predict(input_text)
+        st.write(f"**Predicted Code:** `{code}`")
+        st.write(f"**Description:** {desc}")
+        st.write(f"**Confidence:** {conf:.2%}")
+
+        feedback = st.text_input("If incorrect, enter the correct code:")
+        if feedback:
+            log_feedback(input_text, code, feedback)
+            st.success("📩 Feedback saved. Thank you!")
+
+# === YData Profiling ===
+elif mode == "🧪 CSV Profiling (YData)":
+    st.header("🧪 Automatic CSV Data Profiler")
+    profiling_file = st.file_uploader("Upload a CSV file to profile", type="csv", key="profile")
 
     if profiling_file:
         df = pd.read_csv(profiling_file)
-        st.write("✅ File loaded. Generating profiling report...")
-
-        profile = ProfileReport(df, title="📊 Data Profiling Report", explorative=True)
+        st.subheader("📊 Profile Report")
+        profile = ProfileReport(df, title="CSV Data Report", explorative=True)
         st_profile_report(profile)
 
-        # Save the HTML report to a temporary file and offer download
+        # Save to a temporary HTML file
         with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp_file:
             profile.to_file(tmp_file.name)
             tmp_file.seek(0)
@@ -100,40 +123,7 @@ elif tool == "CSV Profiler":
                 mime="text/html"
             )
 
-            result_df = pd.DataFrame(results)
-            st.success("✅ Predictions complete!")
-            st.dataframe(result_df, use_container_width=True)
-
-            # Download
-            csv = result_df.to_csv(index=False).encode("utf-8")
-            st.download_button("📥 Download Results", csv, "predictions.csv", "text/csv")
-
-    else:
-        st.subheader("Or enter a single description below")
-        input_text = st.text_area("Procurement Description:")
-        if input_text:
-            code, desc, conf = predict(input_text)
-            st.write(f"**Predicted Code:** `{code}`")
-            st.write(f"**Description:** {desc}")
-            st.write(f"**Confidence:** {conf:.2%}")
-
-            feedback = st.text_input("If incorrect, enter the correct code:")
-            if feedback:
-                log_feedback(input_text, code, feedback)
-                st.success("📩 Feedback saved. Thank you!")
-
-elif mode == "🧪 CSV Profiling (YData)":
-    st.header("🧪 Automatic CSV Data Profiler")
-    uploaded_file = st.file_uploader("Upload a CSV file to profile", type="csv", key="profile")
-
-    if uploaded_file:
-        df = pd.read_csv(uploaded_file)
-        st.subheader("📊 Profile Report")
-        profile = ProfileReport(df, title="CSV Data Report", explorative=True)
-        st_profile_report(profile)
-
-import subprocess
-
+# === Admin Tools ===
 with st.expander("⚙️ Admin Tools"):
     if st.button("🔄 Retrain Model"):
         with st.spinner("Retraining model..."):
@@ -142,25 +132,3 @@ with st.expander("⚙️ Admin Tools"):
                 st.success("✅ Model retrained successfully!")
             else:
                 st.error(f"❌ Retraining failed:\n{result.stderr}")
-
-import tempfile
-import streamlit as st
-from ydata_profiling import ProfileReport
-from streamlit_pandas_profiling import st_profile_report
-
-# After reading the uploaded CSV into `df`:
-if profiling_file:
-    df = pd.read_csv(profiling_file)
-    profile = ProfileReport(df, title="Data Profiling Report", explorative=True)
-    st_profile_report(profile)
-
-    # Save to a temporary HTML file
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp_file:
-        profile.to_file(tmp_file.name)
-        tmp_file.seek(0)
-        st.download_button(
-            label="📥 Download HTML Report",
-            data=tmp_file.read(),
-            file_name="data_profile_report.html",
-            mime="text/html"
-        )

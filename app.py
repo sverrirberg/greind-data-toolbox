@@ -15,10 +15,14 @@ st.title("🛠️ Greind Data Toolbox")
 
 from PIL import Image
 
-# Display logo at the top of the app
-logo_path = "Logo_Greind_Horizontal.png"
+# Load the logo
+logo_path = "Logo_Greind_Horizontal.png"  # or "assets/Logo_Greind_Horizontal.png"
 logo = Image.open(logo_path)
-st.image(logo, use_column_width=False, width=300)
+
+# Show the logo in the sidebar
+with st.sidebar:
+    st.image(logo, width=180)  # Adjust width as needed
+
 
 
 # --- Caching ---

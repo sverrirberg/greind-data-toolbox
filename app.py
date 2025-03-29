@@ -10,7 +10,7 @@ import datetime
 import tempfile
 import subprocess
 
-st.set_page_config(page_title="Klappir Data Toolbox", layout="wide")
+st.set_page_config(page_title="Greind Data Toolbox", layout="wide")
 st.title("🛠️ Greind Data Toolbox")
 
 from PIL import Image

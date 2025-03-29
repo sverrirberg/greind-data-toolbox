@@ -11,7 +11,7 @@ import tempfile
 import subprocess
 
 st.set_page_config(page_title="Klappir Data Toolbox", layout="wide")
-st.title("🛠️ Klappir Data Toolbox")
+st.title("🛠️ Greind Data Toolbox")
 
 # --- Caching ---
 @st.cache_resource

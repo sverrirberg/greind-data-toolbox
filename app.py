@@ -13,6 +13,14 @@ import subprocess
 st.set_page_config(page_title="Klappir Data Toolbox", layout="wide")
 st.title("🛠️ Greind Data Toolbox")
 
+from PIL import Image
+
+# Display logo at the top of the app
+logo_path = "Logo_Greind_Horizontal.png"
+logo = Image.open(logo_path)
+st.image(logo, use_column_width=False, width=300)
+
+
 # --- Caching ---
 @st.cache_resource
 def load_model():

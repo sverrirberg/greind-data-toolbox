@@ -68,7 +68,7 @@ def log_feedback(description, predicted_code, correct_code):
         entry.to_csv(log_file, index=False)
 
 # --- Sidebar Menu ---
-mode = st.sidebar.radio("Choose a Tool:", ["🔍 UNSPSC Prediction", "🧪 CSV Profiling (YData)"])
+mode = st.sidebar.radio("Veldu verkfæri:", ["🔍 UNSPSC Prediction", "🧪 CSV Profiling (YData)"])
 
 # === UNSPSC Prediction ===
 if mode == "🔍 UNSPSC Prediction":

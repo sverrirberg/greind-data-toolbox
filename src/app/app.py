@@ -541,13 +541,6 @@ if mode == "🧪 CSV Profiling (YData)":
         # Calculate outliers
         outliers_info = find_outliers(df)
         
-        # Debug information
-        st.write("Debug Information:")
-        st.write(f"Total rows: {total_rows}")
-        st.write(f"Numeric columns: {list(df.select_dtypes(include=[np.number]).columns)}")
-        st.write(f"Duplicate count: {duplicate_count}")
-        st.write(f"Outliers found: {len(outliers_info)}")
-        
         # Calculate quality score
         duplicate_impact = min(duplicate_percentage * 2, 20)  # Max 20 points deduction
         outlier_impact = min(sum(info['percentage'] for info in outliers_info.values()) / len(outliers_info) if outliers_info else 0, 20)  # Max 20 points deduction
@@ -578,186 +571,188 @@ if mode == "🧪 CSV Profiling (YData)":
                     </ul>
                 </div>
                 """, unsafe_allow_html=True)
-            st.markdown("</div>", unsafe_allow_html=True)
-        
-        # Show data quality issues in a table
-        with st.container():
-            st.markdown("<div class='section'>", unsafe_allow_html=True)
-            st.subheader("🔍 Data Quality Issues")
-            
-            # Create a DataFrame for quality issues
-            quality_issues = pd.DataFrame({
-                'Issue Type': ['Duplicate Rows', 'Missing Values'],
-                'Count': [duplicate_count, missing_values],
-                'Percentage': [
-                    f"{duplicate_percentage:.2f}%",
-                    f"{missing_percentage:.2f}%"
-                ],
-                'Impact': [
-                    '🟢 Low' if duplicate_percentage < 5 else '🟡 Medium' if duplicate_percentage < 20 else '🔴 High',
-                    '🟢 Low' if missing_percentage < 5 else '🟡 Medium' if missing_percentage < 20 else '🔴 High'
-                ]
-            })
-            st.table(quality_issues)
-            st.markdown("</div>", unsafe_allow_html=True)
-        
-        # Show outliers information in a table if any found
-        if outliers_info:
-            with st.container():
-                st.markdown("<div class='section'>", unsafe_allow_html=True)
-                st.subheader("📈 Outliers Analysis")
                 
-                # Create a DataFrame for outliers
-                outliers_df = pd.DataFrame([
-                    {
-                        'Column': col,
-                        'Outliers Count': info['count'],
-                        'Percentage': f"{info['percentage']:.2f}%",
-                        'Impact': '🟢 Low' if info['percentage'] < 5 else '🟡 Medium' if info['percentage'] < 20 else '🔴 High'
-                    }
-                    for col, info in outliers_info.items()
-                ])
-                st.table(outliers_df)
-                st.markdown("<p class='info-text'>Outliers are identified using the z-score method (|z| > 3)</p>", unsafe_allow_html=True)
-                st.markdown("</div>", unsafe_allow_html=True)
-        else:
-            with st.container():
-                st.markdown("<div class='section'>", unsafe_allow_html=True)
-                st.subheader("📈 Outliers Analysis")
-                st.info("No outliers found in numeric columns using z-score method (|z| > 3)")
-                st.markdown("</div>", unsafe_allow_html=True)
-        
+                # Move HTML report button here
+                file_info = pd.DataFrame({
+                    'Metric': ['Number of rows', 'Number of columns', 'Total missing values', 'Missing value percentage'],
+                    'Value': [str(len(df)), str(len(df.columns)), str(missing_values), f"{missing_percentage:.2f}%"]
+                }).set_index('Metric')
+                
+                html_content = create_html_report(df, quality_score, missing_values, file_info, profiling_file.name)
+                st.download_button(
+                    label="⬇️ Download HTML Report",
+                    data=html_content,
+                    file_name="data_quality_report.html",
+                    mime="text/html"
+                )
+            st.markdown("</div>", unsafe_allow_html=True)
+
         # Show file information in a table
         with st.container():
             st.markdown("<div class='section'>", unsafe_allow_html=True)
             st.subheader("💡 File Information")
             st.markdown("<p class='info-text'>Basic information about your dataset</p>", unsafe_allow_html=True)
             file_info = pd.DataFrame({
-                'Metric': ['Number of rows', 'Number of columns', 'Total missing values', 'Missing value percentage'],
                 'Value': [str(len(df)), str(len(df.columns)), str(missing_values), f"{missing_percentage:.2f}%"]
-            }).set_index('Metric')
+            }, index=['Number of rows', 'Number of columns', 'Total missing values', 'Missing value percentage'])
             st.table(file_info)
             
-            # Add HTML download button
-            html_content = create_html_report(df, quality_score, missing_values, file_info, profiling_file.name)
-            st.download_button(
-                label="⬇️ Download HTML Report",
-                data=html_content,
-                file_name="data_quality_report.html",
-                mime="text/html"
-            )
-            
-            st.markdown("</div>", unsafe_allow_html=True)
-        
-        # Show column names in a table
-        with st.container():
-            st.markdown("<div class='section'>", unsafe_allow_html=True)
-            st.subheader("📋 Column Names")
-            st.markdown("<p class='info-text'>Detailed information about each column</p>", unsafe_allow_html=True)
-            columns_df = pd.DataFrame({
-                'Data Type': df.dtypes.astype(str),
-                'Missing Values': df.isnull().sum(),
-                'Missing %': (df.isnull().sum() / len(df) * 100).round(2).astype(str) + '%',
-                'Quality Alert': [
-                    '🟢' if (df[col].isnull().sum() / len(df) * 100) < 5
-                    else '🟡' if (df[col].isnull().sum() / len(df) * 100) < 20
-                    else '🔴'
-                    for col in df.columns
-                ]
-            }, index=df.columns)
-            st.table(columns_df)
-            st.markdown("</div>", unsafe_allow_html=True)
-        
-        # Missing values download section
-        with st.container():
-            st.markdown("<div class='section'>", unsafe_allow_html=True)
-            st.subheader("📥 Download Missing Values File")
-            st.markdown("<p class='info-text'>Select columns to include in the missing values report</p>", unsafe_allow_html=True)
-            
-            # Create checkboxes for each column
-            selected_columns = []
-            col1, col2, col3 = st.columns(3)
-            columns_per_col = (len(df.columns) + 2) // 3
-            
-            for i, col in enumerate(df.columns):
-                if i < columns_per_col:
-                    with col1:
-                        if st.checkbox(col, key=f"col_{i}"):
-                            selected_columns.append(col)
-                elif i < columns_per_col * 2:
-                    with col2:
-                        if st.checkbox(col, key=f"col_{i}"):
-                            selected_columns.append(col)
-                else:
-                    with col3:
-                        if st.checkbox(col, key=f"col_{i}"):
-                            selected_columns.append(col)
-            
-            if selected_columns:
-                missing_df = df[df[selected_columns].isnull().any(axis=1)][selected_columns]
+            # Show data quality issues in a table
+            with st.container():
+                st.markdown("<div class='section'>", unsafe_allow_html=True)
+                st.subheader("🔍 Data Quality Issues")
                 
-                if not missing_df.empty:
-                    missing_df['Missing In'] = missing_df.apply(
-                        lambda row: ', '.join([col for col in selected_columns if pd.isnull(row[col])]),
-                        axis=1
-                    )
+                # Create a DataFrame for quality issues without index
+                quality_issues = pd.DataFrame({
+                    'Issue Type': ['Duplicate Rows', 'Missing Values'],
+                    'Count': [duplicate_count, missing_values],
+                    'Percentage': [
+                        f"{duplicate_percentage:.2f}%",
+                        f"{missing_percentage:.2f}%"
+                    ],
+                    'Impact': [
+                        '🟢 Low' if duplicate_percentage < 5 else '🟡 Medium' if duplicate_percentage < 20 else '🔴 High',
+                        '🟢 Low' if missing_percentage < 5 else '🟡 Medium' if missing_percentage < 20 else '🔴 High'
+                    ]
+                })
+                st.table(quality_issues.set_index('Issue Type', drop=True))
+                st.markdown("</div>", unsafe_allow_html=True)
+            
+            # Show outliers information in a table if any found
+            if outliers_info:
+                with st.container():
+                    st.markdown("<div class='section'>", unsafe_allow_html=True)
+                    st.subheader("📈 Outliers Analysis")
                     
-                    csv = missing_df.to_csv(index=False)
-                    st.download_button(
-                        label="📥 Download Missing Values Report",
-                        data=csv,
-                        file_name="missing_values_report.csv",
-                        mime="text/csv"
+                    # Create a DataFrame for outliers without index
+                    outliers_df = pd.DataFrame([
+                        {
+                            'Column': col,
+                            'Outliers Count': info['count'],
+                            'Percentage': f"{info['percentage']:.2f}%",
+                            'Impact': '🟢 Low' if info['percentage'] < 5 else '🟡 Medium' if info['percentage'] < 20 else '🔴 High'
+                        }
+                        for col, info in outliers_info.items()
+                    ])
+                    st.table(outliers_df.set_index('Column', drop=True))
+                    st.markdown("<p class='info-text'>Outliers are identified using the z-score method (|z| > 3)</p>", unsafe_allow_html=True)
+                    st.markdown("</div>", unsafe_allow_html=True)
+            else:
+                with st.container():
+                    st.markdown("<div class='section'>", unsafe_allow_html=True)
+                    st.subheader("📈 Outliers Analysis")
+                    st.info("No outliers found in numeric columns using z-score method (|z| > 3)")
+                    st.markdown("</div>", unsafe_allow_html=True)
+            
+            # Show column names in a table
+            with st.container():
+                st.markdown("<div class='section'>", unsafe_allow_html=True)
+                st.subheader("📋 Column Names")
+                st.markdown("<p class='info-text'>Detailed information about each column</p>", unsafe_allow_html=True)
+                columns_df = pd.DataFrame({
+                    'Data Type': df.dtypes.astype(str),
+                    'Missing Values': df.isnull().sum(),
+                    'Missing %': (df.isnull().sum() / len(df) * 100).round(1).astype(str) + '%',
+                    'Quality Alert': [
+                        '🟢' if (df[col].isnull().sum() / len(df) * 100) < 5
+                        else '🟡' if (df[col].isnull().sum() / len(df) * 100) < 20
+                        else '🔴'
+                        for col in df.columns
+                    ]
+                }, index=df.columns)
+                st.table(columns_df)
+                st.markdown("</div>", unsafe_allow_html=True)
+            
+            # Missing values download section
+            with st.container():
+                st.markdown("<div class='section'>", unsafe_allow_html=True)
+                st.subheader("📥 Download Missing Values File")
+                st.markdown("<p class='info-text'>Select columns to include in the missing values report</p>", unsafe_allow_html=True)
+                
+                # Create checkboxes for each column
+                selected_columns = []
+                col1, col2, col3 = st.columns(3)
+                columns_per_col = (len(df.columns) + 2) // 3
+                
+                for i, col in enumerate(df.columns):
+                    if i < columns_per_col:
+                        with col1:
+                            if st.checkbox(col, key=f"col_{i}"):
+                                selected_columns.append(col)
+                    elif i < columns_per_col * 2:
+                        with col2:
+                            if st.checkbox(col, key=f"col_{i}"):
+                                selected_columns.append(col)
+                    else:
+                        with col3:
+                            if st.checkbox(col, key=f"col_{i}"):
+                                selected_columns.append(col)
+                
+                if selected_columns:
+                    missing_df = df[df[selected_columns].isnull().any(axis=1)][selected_columns]
+                    
+                    if not missing_df.empty:
+                        missing_df['Missing In'] = missing_df.apply(
+                            lambda row: ', '.join([col for col in selected_columns if pd.isnull(row[col])]),
+                            axis=1
+                        )
+                        
+                        csv = missing_df.to_csv(index=False)
+                        st.download_button(
+                            label="📥 Download Missing Values Report",
+                            data=csv,
+                            file_name="missing_values_report.csv",
+                            mime="text/csv"
+                        )
+                    else:
+                        st.info("No missing values found in selected columns.")
+                st.markdown("</div>", unsafe_allow_html=True)
+            
+            # Show data preview
+            with st.container():
+                st.markdown("<div class='section'>", unsafe_allow_html=True)
+                st.subheader("📋 Data Preview")
+                st.markdown("<p class='info-text'>First few rows of your dataset</p>", unsafe_allow_html=True)
+                st.dataframe(df)
+                st.markdown("</div>", unsafe_allow_html=True)
+            
+            # Configuration options
+            with st.container():
+                st.markdown("<div class='section'>", unsafe_allow_html=True)
+                st.subheader("⚙️ Detailed Analysis")
+                st.markdown("<p class='info-text'>Customize your analysis</p>", unsafe_allow_html=True)
+                col1, col2 = st.columns(2)
+                with col1:
+                    show_correlation = st.checkbox("Show correlations", value=True)
+                    show_missing = st.checkbox("Show missing values", value=True)
+                with col2:
+                    show_duplicates = st.checkbox("Show duplicates", value=True)
+                    show_samples = st.checkbox("Show samples", value=True)
+                st.markdown("</div>", unsafe_allow_html=True)
+            
+            # Generate report button
+            if st.button("⚙️ Detailed Analysis", key="profile_button"):
+                with st.spinner("Generating detailed analysis..."):
+                    profile = ProfileReport(
+                        df,
+                        title="CSV Data Report",
+                        explorative=True,
+                        correlations={"auto": {"calculate": show_correlation}},
+                        missing_diagrams={"matrix": show_missing},
+                        duplicates={"head": show_duplicates},
+                        samples={"head": show_samples}
                     )
-                else:
-                    st.info("No missing values found in selected columns.")
-            st.markdown("</div>", unsafe_allow_html=True)
-        
-        # Show data preview
-        with st.container():
-            st.markdown("<div class='section'>", unsafe_allow_html=True)
-            st.subheader("📋 Data Preview")
-            st.markdown("<p class='info-text'>First few rows of your dataset</p>", unsafe_allow_html=True)
-            st.dataframe(df)
-            st.markdown("</div>", unsafe_allow_html=True)
-        
-        # Configuration options
-        with st.container():
-            st.markdown("<div class='section'>", unsafe_allow_html=True)
-            st.subheader("⚙️ Detailed Analysis")
-            st.markdown("<p class='info-text'>Customize your analysis</p>", unsafe_allow_html=True)
-            col1, col2 = st.columns(2)
-            with col1:
-                show_correlation = st.checkbox("Show correlations", value=True)
-                show_missing = st.checkbox("Show missing values", value=True)
-            with col2:
-                show_duplicates = st.checkbox("Show duplicates", value=True)
-                show_samples = st.checkbox("Show samples", value=True)
-            st.markdown("</div>", unsafe_allow_html=True)
-        
-        # Generate report button
-        if st.button("⚙️ Detailed Analysis", key="profile_button"):
-            with st.spinner("Generating detailed analysis..."):
-                profile = ProfileReport(
-                    df,
-                    title="CSV Data Report",
-                    explorative=True,
-                    correlations={"auto": {"calculate": show_correlation}},
-                    missing_diagrams={"matrix": show_missing},
-                    duplicates={"head": show_duplicates},
-                    samples={"head": show_samples}
-                )
-                st_profile_report(profile)
+                    st_profile_report(profile)
 
-                with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp_file:
-                    profile.to_file(tmp_file.name)
-                    tmp_file.seek(0)
-                    st.download_button(
-                        label="📥 Download Report",
-                        data=tmp_file.read(),
-                        file_name="data_profile_report.html",
-                        mime="text/html"
-                    )
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp_file:
+                        profile.to_file(tmp_file.name)
+                        tmp_file.seek(0)
+                        st.download_button(
+                            label="📥 Download Report",
+                            data=tmp_file.read(),
+                            file_name="data_profile_report.html",
+                            mime="text/html"
+                        )
 
 # === UNSPSC Prediction ===
 elif mode == "🔍 UNSPSC LLM Training":

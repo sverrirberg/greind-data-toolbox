@@ -99,7 +99,7 @@ if mode == "🧪 CSV Profiling (YData)":
         file_info = pd.DataFrame({
             'Metric': ['Number of rows', 'Number of columns'],
             'Value': [len(df), len(df.columns)]
-        })
+        }).set_index('Metric')
         st.table(file_info)
         
         # Show column names in a table

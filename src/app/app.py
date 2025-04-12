@@ -37,7 +37,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
     st.image(logo, use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown("**Version:** 1.0.5", unsafe_allow_html=True)
+    st.markdown("**Version:** 1.1.2", unsafe_allow_html=True)
 
 # --- Caching ---
 @st.cache_resource

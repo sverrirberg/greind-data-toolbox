@@ -27,8 +27,8 @@ with st.sidebar:
 # --- Caching ---
 @st.cache_resource
 def load_model():
-    model = joblib.load("xgb_unspsc_model.pkl")
-    encoder = joblib.load("xgb_label_encoder.pkl")
+    model = joblib.load("src/models/xgb_unspsc_model.pkl")
+    encoder = joblib.load("src/models/xgb_label_encoder.pkl")
     return model, encoder
 
 @st.cache_resource

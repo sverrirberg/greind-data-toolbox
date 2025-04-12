@@ -76,7 +76,7 @@ st.markdown("""
         justify-content: center;
     }
     .big-number {
-        font-size: 15vw;
+        font-size: 10.5vw;
         font-weight: bold;
         line-height: 1;
         margin: 0;
@@ -87,7 +87,7 @@ st.markdown("""
     }
     @media (min-width: 1200px) {
         .big-number {
-            font-size: 180px;
+            font-size: 126px;
         }
     }
 </style>

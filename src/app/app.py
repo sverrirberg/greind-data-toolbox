@@ -240,7 +240,7 @@ if mode == "🧪 CSV Profiling (YData)":
             st.markdown("<p class='info-text'>Basic information about your dataset</p>", unsafe_allow_html=True)
             file_info = pd.DataFrame({
                 'Metric': ['Number of rows', 'Number of columns', 'Total missing values', 'Missing value percentage'],
-                'Value': [len(df), len(df.columns), missing_values, f"{missing_percentage:.2f}%"]
+                'Value': [str(len(df)), str(len(df.columns)), str(missing_values), f"{missing_percentage:.2f}%"]
             }).set_index('Metric')
             st.table(file_info)
             st.markdown("</div>", unsafe_allow_html=True)

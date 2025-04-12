@@ -72,21 +72,42 @@ mode = st.sidebar.radio("Choose a Tool:", ["🧪 CSV Profiling (YData)", "🔍 U
 
 # === YData Profiling ===
 if mode == "🧪 CSV Profiling (YData)":
-    st.header("🧪 Automatic CSV Data Profiler")
-    profiling_file = st.file_uploader("Upload a CSV file to profile", type="csv", key="profile")
-
+    st.header("🧪 CSV Data Profiler")
+    
+    # Upload section
+    profiling_file = st.file_uploader("Upload CSV file", type="csv", key="profile")
+    
     if profiling_file:
         df = pd.read_csv(profiling_file)
-        st.subheader("📊 Profile Report")
-        profile = ProfileReport(df, title="CSV Data Report", explorative=True)
+        
+        # Configuration options
+        with st.expander("⚙️ Configuration", expanded=True):
+            col1, col2 = st.columns(2)
+            with col1:
+                show_correlation = st.checkbox("Show correlations", value=True)
+                show_missing = st.checkbox("Show missing values", value=True)
+            with col2:
+                show_duplicates = st.checkbox("Show duplicates", value=True)
+                show_samples = st.checkbox("Show samples", value=True)
+        
+        # Generate and show report
+        profile = ProfileReport(
+            df,
+            title="CSV Data Report",
+            explorative=True,
+            correlations={"auto": {"calculate": show_correlation}},
+            missing_diagrams={"matrix": show_missing},
+            duplicates={"head": show_duplicates},
+            samples={"head": show_samples}
+        )
         st_profile_report(profile)
 
-        # Save to a temporary HTML file
+        # Download button
         with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp_file:
             profile.to_file(tmp_file.name)
             tmp_file.seek(0)
             st.download_button(
-                label="📥 Download HTML Report",
+                label="📥 Download Report",
                 data=tmp_file.read(),
                 file_name="data_profile_report.html",
                 mime="text/html"

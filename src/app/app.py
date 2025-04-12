@@ -12,7 +12,7 @@ import subprocess
 import matplotlib.pyplot as plt
 import seaborn as sns
 from PIL import Image
-from fpdf import FPDF
+from fpdf2 import FPDF
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart

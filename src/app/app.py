@@ -64,7 +64,7 @@ st.markdown("""
         margin-top: 0.5rem;
     }
     .quality-score {
-        font-size: 8em;
+        font-size: 10em;
         font-weight: bold;
         margin: 0;
         padding: 0;
@@ -75,8 +75,8 @@ st.markdown("""
     }
     .quality-label {
         color: #666;
-        font-size: 1.5em;
-        margin-top: 0.5rem;
+        font-size: 1.2em;
+        margin-top: -1rem;
         text-align: center;
         font-weight: 500;
     }

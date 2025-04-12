@@ -243,6 +243,17 @@ if mode == "🧪 CSV Profiling (YData)":
                 'Value': [str(len(df)), str(len(df.columns)), str(missing_values), f"{missing_percentage:.2f}%"]
             }).set_index('Metric')
             st.table(file_info)
+            
+            # Add HTML download button
+            if st.button("📥 Download HTML Report"):
+                html_content = create_html_report(df, quality_score, missing_values, file_info)
+                st.download_button(
+                    label="⬇️ Download HTML",
+                    data=html_content,
+                    file_name="data_quality_report.html",
+                    mime="text/html"
+                )
+            
             st.markdown("</div>", unsafe_allow_html=True)
         
         # Show column names in a table

@@ -37,7 +37,7 @@ def load_bert():
 
 @st.cache_data
 def load_unspsc_mapping():
-    df = pd.read_csv("UNSPSC_classification.csv")
+    df = pd.read_csv("data/raw/UNSPSC_classification.csv")
     df["unspsc_code"] = df["unspsc_code"].astype(str).str.zfill(6)
     return df.set_index("unspsc_code")["description"].to_dict()
 

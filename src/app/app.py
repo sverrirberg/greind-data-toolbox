@@ -201,22 +201,19 @@ def create_html_report(df, quality_score, missing_values, file_info):
                 <th>Metric</th>
                 <th>Value</th>
             </tr>
+    """
+    
+    # Add file information rows
+    for metric in file_info.index:
+        value = file_info.loc[metric, 'Value']
+        html_content += f"""
             <tr>
-                <td>Number of rows</td>
-                <td>{file_info['Number of rows']}</td>
+                <td>{metric}</td>
+                <td>{value}</td>
             </tr>
-            <tr>
-                <td>Number of columns</td>
-                <td>{file_info['Number of columns']}</td>
-            </tr>
-            <tr>
-                <td>Total missing values</td>
-                <td>{file_info['Total missing values']}</td>
-            </tr>
-            <tr>
-                <td>Missing value percentage</td>
-                <td>{file_info['Missing value percentage']}</td>
-            </tr>
+        """
+    
+    html_content += """
         </table>
         
         <h2>Missing Values Summary</h2>

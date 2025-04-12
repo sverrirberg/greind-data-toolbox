@@ -200,10 +200,20 @@ elif mode == "🔍 UNSPSC LLM Training":
 # === NAICS Project ===
 elif mode == "📊 NAICS Project":
     st.header("📊 NAICS Project")
-    st.markdown("""
-        <a href="https://greind-naics-project.streamlit.app" target="_blank">
-            <button style="background-color: #FF4B4B; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
-                Open NAICS Project in New Tab
-            </button>
-        </a>
-    """, unsafe_allow_html=True)
+    
+    # File uploader
+    uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
+    
+    if uploaded_file is not None:
+        # Read the CSV file
+        df = pd.read_csv(uploaded_file)
+        
+        # Show the data
+        st.subheader("📋 Data Preview")
+        st.dataframe(df)
+        
+        # Add your NAICS Project functionality here
+        # For example:
+        # - Data processing
+        # - Model predictions
+        # - Results visualization

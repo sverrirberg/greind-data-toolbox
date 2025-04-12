@@ -78,22 +78,37 @@ mode = st.sidebar.radio("Choose a Tool:", ["🧪 CSV Profiling (YData)", "🔍 U
 if mode == "🧪 CSV Profiling (YData)":
     st.header("🧪 CSV Data Profiler")
     
+    # Information text
+    st.markdown("""
+    ### 📝 Important Information
+    - The CSV file should be in UTF-8 encoding
+    - The first row should contain column headers
+    - Date columns should be in a standard format (YYYY-MM-DD or similar)
+    - Numeric columns should use dot (.) as decimal separator
+    - Empty cells will be treated as missing values
+    """)
+    
     # Upload section
     profiling_file = st.file_uploader("Upload CSV file", type="csv", key="profile")
     
     if profiling_file:
         df = pd.read_csv(profiling_file)
         
-        # Show file information
+        # Show file information in a table
         st.subheader("📊 File Information")
-        col1, col2 = st.columns(2)
-        with col1:
-            st.write(f"**Number of rows:** {len(df)}")
-            st.write(f"**Number of columns:** {len(df.columns)}")
-        with col2:
-            st.write(f"**Column names:**")
-            for col in df.columns:
-                st.write(f"- {col}")
+        file_info = pd.DataFrame({
+            'Metric': ['Number of rows', 'Number of columns'],
+            'Value': [len(df), len(df.columns)]
+        })
+        st.table(file_info)
+        
+        # Show column names in a table
+        st.subheader("📋 Column Names")
+        columns_df = pd.DataFrame({
+            'Column Name': df.columns,
+            'Data Type': df.dtypes.astype(str)
+        })
+        st.table(columns_df)
         
         # Show data preview
         st.subheader("📋 Data Preview")

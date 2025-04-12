@@ -68,10 +68,10 @@ def log_feedback(description, predicted_code, correct_code):
         entry.to_csv(log_file, index=False)
 
 # --- Sidebar Menu ---
-mode = st.sidebar.radio("Veldu verkfæri:", ["🔍 UNSPSC Prediction", "🧪 CSV Profiling (YData)"])
+mode = st.sidebar.radio("Choose a Tool:", ["🔍 UNSPSC LLM Training", "🧪 CSV Profiling (YData)"])
 
 # === UNSPSC Prediction ===
-if mode == "🔍 UNSPSC Prediction":
+if mode == "🔍 UNSPSC LLM Training":
     st.header("🔍 UNSPSC LLM Training")
     uploaded_file = st.file_uploader("Upload a CSV with a 'description' column", type=["csv"], key="unspsc")
 

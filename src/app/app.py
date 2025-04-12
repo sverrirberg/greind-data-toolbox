@@ -12,17 +12,7 @@ import subprocess
 import matplotlib.pyplot as plt
 import seaborn as sns
 from PIL import Image
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
-from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from email.mime.application import MIMEApplication
 from dotenv import load_dotenv
-from weasyprint import HTML
 
 # Load environment variables
 load_dotenv()
@@ -542,31 +532,3 @@ def create_html_report(df, quality_score, missing_values, file_info):
     """
     
     return html_content
-
-def send_email(receiver_email, subject, body, attachment_path=None):
-    sender_email = os.getenv("EMAIL_USER")
-    password = os.getenv("EMAIL_PASSWORD")
-    
-    msg = MIMEMultipart()
-    msg["From"] = sender_email
-    msg["To"] = receiver_email
-    msg["Subject"] = subject
-    
-    msg.attach(MIMEText(body, "plain"))
-    
-    if attachment_path:
-        with open(attachment_path, "rb") as f:
-            attach = MIMEApplication(f.read(), _subtype="pdf")
-            attach.add_header("Content-Disposition", "attachment", filename="data_quality_report.pdf")
-            msg.attach(attach)
-    
-    try:
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(sender_email, password)
-        server.send_message(msg)
-        server.quit()
-        return True
-    except Exception as e:
-        st.error(f"Error sending email: {str(e)}")
-        return False

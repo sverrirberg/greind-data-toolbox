@@ -572,8 +572,16 @@ if mode == "🧪 CSV Profiling (YData)":
                 </div>
                 """, unsafe_allow_html=True)
                 
-                # Move HTML report button here with padding
-                st.markdown("<div style='padding-top: 20px;'>", unsafe_allow_html=True)
+                # Add custom CSS for the download button
+                st.markdown("""
+                <style>
+                div[data-testid="stDownloadButton"] {
+                    margin-top: 35px;
+                    padding-top: 20px;
+                }
+                </style>
+                """, unsafe_allow_html=True)
+                
                 file_info = pd.DataFrame({
                     'Value': [str(len(df)), str(len(df.columns)), str(missing_values), f"{missing_percentage:.2f}%"]
                 }, index=['Number of rows', 'Number of columns', 'Total missing values', 'Missing value percentage'])
@@ -585,7 +593,7 @@ if mode == "🧪 CSV Profiling (YData)":
                     file_name="data_quality_report.html",
                     mime="text/html"
                 )
-                st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
         # Show file information in a table
         with st.container():

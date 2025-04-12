@@ -541,7 +541,14 @@ if mode == "🧪 CSV Profiling (YData)":
         # Calculate outliers
         outliers_info = find_outliers(df)
         
-        # Calculate quality score (updated to include duplicates and outliers)
+        # Debug information
+        st.write("Debug Information:")
+        st.write(f"Total rows: {total_rows}")
+        st.write(f"Numeric columns: {list(df.select_dtypes(include=[np.number]).columns)}")
+        st.write(f"Duplicate count: {duplicate_count}")
+        st.write(f"Outliers found: {len(outliers_info)}")
+        
+        # Calculate quality score
         duplicate_impact = min(duplicate_percentage * 2, 20)  # Max 20 points deduction
         outlier_impact = min(sum(info['percentage'] for info in outliers_info.values()) / len(outliers_info) if outliers_info else 0, 20)  # Max 20 points deduction
         quality_score = 100 - (missing_percentage * 1.5) - duplicate_impact - outlier_impact
@@ -573,25 +580,51 @@ if mode == "🧪 CSV Profiling (YData)":
                 """, unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)
         
-        # Show duplicates information
+        # Show data quality issues in a table
         with st.container():
             st.markdown("<div class='section'>", unsafe_allow_html=True)
-            st.subheader("🔄 Duplicate Rows")
-            st.markdown(f"""
-            <p>Found {duplicate_count} duplicate rows ({duplicate_percentage:.2f}% of total rows)</p>
-            """, unsafe_allow_html=True)
+            st.subheader("🔍 Data Quality Issues")
+            
+            # Create a DataFrame for quality issues
+            quality_issues = pd.DataFrame({
+                'Issue Type': ['Duplicate Rows', 'Missing Values'],
+                'Count': [duplicate_count, missing_values],
+                'Percentage': [
+                    f"{duplicate_percentage:.2f}%",
+                    f"{missing_percentage:.2f}%"
+                ],
+                'Impact': [
+                    '🟢 Low' if duplicate_percentage < 5 else '🟡 Medium' if duplicate_percentage < 20 else '🔴 High',
+                    '🟢 Low' if missing_percentage < 5 else '🟡 Medium' if missing_percentage < 20 else '🔴 High'
+                ]
+            })
+            st.table(quality_issues)
             st.markdown("</div>", unsafe_allow_html=True)
         
-        # Show outliers information
+        # Show outliers information in a table if any found
         if outliers_info:
             with st.container():
                 st.markdown("<div class='section'>", unsafe_allow_html=True)
                 st.subheader("📈 Outliers Analysis")
-                for column, info in outliers_info.items():
-                    st.markdown(f"""
-                    <p>{column}: {info['count']} outliers ({info['percentage']:.2f}% of non-null values)</p>
-                    """, unsafe_allow_html=True)
+                
+                # Create a DataFrame for outliers
+                outliers_df = pd.DataFrame([
+                    {
+                        'Column': col,
+                        'Outliers Count': info['count'],
+                        'Percentage': f"{info['percentage']:.2f}%",
+                        'Impact': '🟢 Low' if info['percentage'] < 5 else '🟡 Medium' if info['percentage'] < 20 else '🔴 High'
+                    }
+                    for col, info in outliers_info.items()
+                ])
+                st.table(outliers_df)
                 st.markdown("<p class='info-text'>Outliers are identified using the z-score method (|z| > 3)</p>", unsafe_allow_html=True)
+                st.markdown("</div>", unsafe_allow_html=True)
+        else:
+            with st.container():
+                st.markdown("<div class='section'>", unsafe_allow_html=True)
+                st.subheader("📈 Outliers Analysis")
+                st.info("No outliers found in numeric columns using z-score method (|z| > 3)")
                 st.markdown("</div>", unsafe_allow_html=True)
         
         # Show file information in a table

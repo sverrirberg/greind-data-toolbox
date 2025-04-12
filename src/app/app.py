@@ -64,7 +64,7 @@ st.markdown("""
         margin-top: 0.5rem;
     }
     .quality-score {
-        font-size: 10em;
+        font-size: 12em;
         font-weight: bold;
         margin: 0;
         padding: 0;
@@ -87,6 +87,10 @@ st.markdown("""
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         margin: 1rem 0;
         text-align: center;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -201,7 +205,6 @@ if mode == "🧪 CSV Profiling (YData)":
                     <p class='quality-score' style='color: {'#4CAF50' if quality_score >= 80 else '#FFC107' if quality_score >= 60 else '#F44336'};'>
                         {quality_score:.1f}%
                     </p>
-                    <p class='quality-label'>Overall Data Quality</p>
                 </div>
                 """, unsafe_allow_html=True)
             with col2:
@@ -209,8 +212,8 @@ if mode == "🧪 CSV Profiling (YData)":
                 <h4>Quality Indicators</h4>
                 <ul>
                     <li>🟢 Excellent (80-100%)</li>
-                    <li>🟡 Good (60-79%)</li>
-                    <li>🔴 Needs Attention (0-59%)</li>
+                    <li>🟡 Needs Attention (60-79%)</li>
+                    <li>🔴 Poor (0-59%)</li>
                 </ul>
                 """, unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)

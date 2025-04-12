@@ -314,17 +314,6 @@ if mode == "🧪 CSV Profiling (YData)":
                     </ul>
                 </div>
                 """, unsafe_allow_html=True)
-            
-            # Add HTML download button
-            if st.button("📥 Download HTML Report"):
-                html_content = create_html_report(df, quality_score, missing_values, file_info)
-                st.download_button(
-                    label="⬇️ Download HTML",
-                    data=html_content,
-                    file_name="data_quality_report.html",
-                    mime="text/html"
-                )
-            
             st.markdown("</div>", unsafe_allow_html=True)
         
         # Show file information in a table

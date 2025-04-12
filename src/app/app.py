@@ -171,6 +171,24 @@ def create_html_report(df, quality_score, missing_values, file_info):
             tr:nth-child(even) {{
                 background-color: #f9f9f9;
             }}
+            .indicator {{
+                display: inline-block;
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-weight: bold;
+            }}
+            .excellent {{
+                background-color: #4CAF50;
+                color: white;
+            }}
+            .attention {{
+                background-color: #FFC107;
+                color: black;
+            }}
+            .poor {{
+                background-color: #F44336;
+                color: white;
+            }}
         </style>
     </head>
     <body>
@@ -183,17 +201,22 @@ def create_html_report(df, quality_score, missing_values, file_info):
                 <th>Metric</th>
                 <th>Value</th>
             </tr>
-    """
-    
-    for metric, value in file_info.items():
-        html_content += f"""
             <tr>
-                <td>{metric}</td>
-                <td>{value}</td>
+                <td>Number of rows</td>
+                <td>{file_info['Number of rows']}</td>
             </tr>
-        """
-    
-    html_content += """
+            <tr>
+                <td>Number of columns</td>
+                <td>{file_info['Number of columns']}</td>
+            </tr>
+            <tr>
+                <td>Total missing values</td>
+                <td>{file_info['Total missing values']}</td>
+            </tr>
+            <tr>
+                <td>Missing value percentage</td>
+                <td>{file_info['Missing value percentage']}</td>
+            </tr>
         </table>
         
         <h2>Missing Values Summary</h2>
@@ -201,18 +224,26 @@ def create_html_report(df, quality_score, missing_values, file_info):
             <tr>
                 <th>Column</th>
                 <th>Missing Count</th>
-                <th>Missing %</th>
+                <th>Quality</th>
             </tr>
     """
     
     for col in df.columns:
         missing = df[col].isnull().sum()
         if missing > 0:
+            missing_percent = missing/len(df)*100
+            if missing_percent < 5:
+                indicator = '<span class="indicator excellent">🟢 Excellent</span>'
+            elif missing_percent < 20:
+                indicator = '<span class="indicator attention">🟡 Needs Attention</span>'
+            else:
+                indicator = '<span class="indicator poor">🔴 Poor</span>'
+            
             html_content += f"""
                 <tr>
                     <td>{col}</td>
                     <td>{missing}</td>
-                    <td>{missing/len(df)*100:.1f}%</td>
+                    <td>{indicator}</td>
                 </tr>
             """
     

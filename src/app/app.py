@@ -35,7 +35,7 @@ with st.sidebar:
     </style>
     <div class="logo-container">
     """, unsafe_allow_html=True)
-    st.image(logo, use_column_width=True)
+    st.image(logo, use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
     st.markdown("**Version:** 1.0.5", unsafe_allow_html=True)
 

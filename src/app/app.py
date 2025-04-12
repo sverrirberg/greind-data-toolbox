@@ -250,7 +250,7 @@ if mode == "🧪 CSV Profiling (YData)":
         # Missing values download section
         with st.container():
             st.markdown("<div class='section'>", unsafe_allow_html=True)
-            st.subheader("📥 Download Missing Values")
+            st.subheader("📥 Download Missing Values File")
             st.markdown("<p class='info-text'>Select columns to include in the missing values report</p>", unsafe_allow_html=True)
             
             # Create checkboxes for each column

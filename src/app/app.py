@@ -22,7 +22,7 @@ logo = Image.open(logo_path)
 # Show the logo in the sidebar
 with st.sidebar:
     st.image(logo, width=180)  # Adjust width as needed
-    st.markdown("**Version:** 1.0.0", unsafe_allow_html=True)
+    st.markdown("**Version:** 1.0.5", unsafe_allow_html=True)
 
 # --- Caching ---
 @st.cache_resource

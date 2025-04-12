@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from PIL import Image
 import base64
+from scipy import stats
 
 st.set_page_config(
     page_title="Greind Data Toolbox",
@@ -131,10 +132,39 @@ def load_unspsc_mapping():
     df["unspsc_code"] = df["unspsc_code"].astype(str).str.zfill(6)
     return df.set_index("unspsc_code")["description"].to_dict()
 
+def find_duplicates(df):
+    """Find duplicate rows in the dataframe."""
+    duplicates = df.duplicated(keep='first')
+    duplicate_count = duplicates.sum()
+    duplicate_percentage = (duplicate_count / len(df)) * 100
+    return duplicate_count, duplicate_percentage
+
+def find_outliers(df):
+    """Find outliers in numeric columns using z-score method."""
+    outliers_info = {}
+    for column in df.select_dtypes(include=[np.number]).columns:
+        # Calculate z-scores
+        z_scores = np.abs(stats.zscore(df[column].dropna()))
+        # Count outliers (z-score > 3)
+        outliers_count = (z_scores > 3).sum()
+        if outliers_count > 0:
+            outliers_percentage = (outliers_count / len(df[column].dropna())) * 100
+            outliers_info[column] = {
+                'count': outliers_count,
+                'percentage': outliers_percentage
+            }
+    return outliers_info
+
 def create_html_report(df, quality_score, missing_values, file_info, filename):
     # Get current date and time
     now = datetime.datetime.now()
     date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Get duplicates information
+    duplicate_count, duplicate_percentage = find_duplicates(df)
+    
+    # Get outliers information
+    outliers_info = find_outliers(df)
     
     # Convert logo to base64
     with open("src/app/assets/Logo_Greind_Horizontal.png", "rb") as image_file:
@@ -379,12 +409,68 @@ def create_html_report(df, quality_score, missing_values, file_info, filename):
     html_content += """
                 </table>
             </div>
+            
+            <div class="section">
+                <h2 class="section-title">
+                    <i>🔍</i> Data Quality Issues
+                </h2>
+                <table>
+                    <tr>
+                        <th>Issue Type</th>
+                        <th>Count</th>
+                        <th>Percentage</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td><span class="metric-icon">🔄</span>Duplicate Rows</td>
+                        <td>{duplicate_count}</td>
+                        <td>{duplicate_percentage:.2f}%</td>
+                        <td>{get_status_indicator(duplicate_percentage)}</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">
+                    <i>📊</i> Outliers Analysis
+                </h2>
+                <table>
+                    <tr>
+                        <th>Column</th>
+                        <th>Outliers Count</th>
+                        <th>Percentage</th>
+                        <th>Status</th>
+                    </tr>
+    """
+    
+    for column, info in outliers_info.items():
+        html_content += f"""
+            <tr>
+                <td><span class="metric-icon">📈</span>{column}</td>
+                <td>{info['count']}</td>
+                <td>{info['percentage']:.2f}%</td>
+                <td>{get_status_indicator(info['percentage'])}</td>
+            </tr>
+        """
+    
+    html_content += """
+                </table>
+                <p class="note">Note: Outliers are identified using the z-score method (|z| > 3)</p>
+            </div>
         </div>
     </body>
     </html>
     """
     
     return html_content
+
+def get_status_indicator(percentage):
+    if percentage < 5:
+        return '<span class="indicator excellent">🟢 Low Impact</span>'
+    elif percentage < 20:
+        return '<span class="indicator attention">🟡 Medium Impact</span>'
+    else:
+        return '<span class="indicator poor">🔴 High Impact</span>'
 
 model, encoder = load_model()
 bert = load_bert()
@@ -443,14 +529,23 @@ if mode == "🧪 CSV Profiling (YData)":
     if profiling_file:
         df = pd.read_csv(profiling_file)
         
-        # Calculate data quality metrics
+        # Calculate basic metrics
         total_rows = len(df)
         total_cols = len(df.columns)
         missing_values = df.isnull().sum().sum()
         missing_percentage = (missing_values / (total_rows * total_cols)) * 100
         
-        # Calculate data quality score (0-100)
-        quality_score = 100 - (missing_percentage * 2)
+        # Calculate duplicates
+        duplicate_count, duplicate_percentage = find_duplicates(df)
+        
+        # Calculate outliers
+        outliers_info = find_outliers(df)
+        
+        # Calculate quality score (updated to include duplicates and outliers)
+        duplicate_impact = min(duplicate_percentage * 2, 20)  # Max 20 points deduction
+        outlier_impact = min(sum(info['percentage'] for info in outliers_info.values()) / len(outliers_info) if outliers_info else 0, 20)  # Max 20 points deduction
+        quality_score = 100 - (missing_percentage * 1.5) - duplicate_impact - outlier_impact
+        quality_score = max(0, min(100, quality_score))  # Ensure score is between 0 and 100
         
         # Show data quality score
         with st.container():
@@ -477,6 +572,27 @@ if mode == "🧪 CSV Profiling (YData)":
                 </div>
                 """, unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)
+        
+        # Show duplicates information
+        with st.container():
+            st.markdown("<div class='section'>", unsafe_allow_html=True)
+            st.subheader("🔄 Duplicate Rows")
+            st.markdown(f"""
+            <p>Found {duplicate_count} duplicate rows ({duplicate_percentage:.2f}% of total rows)</p>
+            """, unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
+        
+        # Show outliers information
+        if outliers_info:
+            with st.container():
+                st.markdown("<div class='section'>", unsafe_allow_html=True)
+                st.subheader("📈 Outliers Analysis")
+                for column, info in outliers_info.items():
+                    st.markdown(f"""
+                    <p>{column}: {info['count']} outliers ({info['percentage']:.2f}% of non-null values)</p>
+                    """, unsafe_allow_html=True)
+                st.markdown("<p class='info-text'>Outliers are identified using the z-score method (|z| > 3)</p>", unsafe_allow_html=True)
+                st.markdown("</div>", unsafe_allow_html=True)
         
         # Show file information in a table
         with st.container():

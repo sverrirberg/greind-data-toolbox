@@ -148,76 +148,130 @@ def create_html_report(df, quality_score, missing_values, file_info, filename):
         <style>
             body {{
                 font-family: Arial, sans-serif;
-                margin: 40px;
+                margin: 0;
+                padding: 0;
                 background-color: #f8f9fa;
             }}
-            .header {{
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 20px;
+            .container {{
+                max-width: 1200px;
+                margin: 0 auto;
                 padding: 20px;
+            }}
+            .header {{
                 background-color: white;
-                border-radius: 10px;
+                padding: 20px 40px;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                margin-bottom: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
             }}
             .logo {{
-                height: 50px;
+                height: 60px;
             }}
             .title {{
-                text-align: center;
                 color: #333;
+                font-size: 24px;
                 margin: 0;
             }}
-            .info {{
-                text-align: center;
-                color: #666;
-                margin-bottom: 20px;
-                padding: 15px;
+            .info-box {{
                 background-color: white;
                 border-radius: 10px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }}
-            .score {{
-                font-size: 48px;
-                color: blue;
-                text-align: center;
-                margin: 20px 0;
                 padding: 20px;
-                background-color: white;
-                border-radius: 10px;
+                margin-bottom: 30px;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             }}
-            h2 {{
-                color: #444;
-                margin-top: 30px;
-                padding-left: 10px;
+            .info-box p {{
+                margin: 5px 0;
+                color: #666;
+                font-size: 14px;
+            }}
+            .info-box .generated-by {{
+                color: #999;
+                font-size: 12px;
+                margin-top: 10px;
+            }}
+            .score-container {{
+                text-align: center;
+                margin-bottom: 30px;
+            }}
+            .score-circle {{
+                width: 200px;
+                height: 200px;
+                border-radius: 50%;
+                margin: 0 auto;
+                position: relative;
+                background: {'#4CAF50' if quality_score >= 80 else '#FFC107' if quality_score >= 60 else '#F44336'};
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            }}
+            .score-number {{
+                font-size: 48px;
+                font-weight: bold;
+                color: white;
+            }}
+            .score-label {{
+                margin-top: 15px;
+                font-size: 18px;
+                color: #666;
+            }}
+            .score-description {{
+                margin-top: 10px;
+                color: #666;
+                font-size: 14px;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }}
+            .section {{
+                background-color: white;
+                border-radius: 10px;
+                padding: 25px;
+                margin-bottom: 30px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }}
+            .section-title {{
+                color: #333;
+                font-size: 20px;
+                margin: 0 0 20px 0;
+                display: flex;
+                align-items: center;
+            }}
+            .section-title i {{
+                margin-right: 10px;
+                color: #666;
             }}
             table {{
                 width: 100%;
                 border-collapse: collapse;
                 margin: 20px 0;
                 background-color: white;
-                border-radius: 10px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             }}
             th, td {{
-                border: 1px solid #ddd;
-                padding: 12px;
+                padding: 15px;
                 text-align: left;
+                border-bottom: 1px solid #eee;
             }}
             th {{
-                background-color: #f2f2f2;
-                font-weight: bold;
+                background-color: #f8f9fa;
+                font-weight: 600;
+                color: #333;
             }}
-            tr:nth-child(even) {{
-                background-color: #f9f9f9;
+            tr:hover {{
+                background-color: #f8f9fa;
+            }}
+            .metric-icon {{
+                color: #666;
+                margin-right: 10px;
             }}
             .indicator {{
                 display: inline-block;
-                padding: 4px 8px;
-                border-radius: 4px;
-                font-weight: bold;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-weight: 500;
+                font-size: 14px;
             }}
             .excellent {{
                 background-color: #4CAF50;
@@ -237,44 +291,70 @@ def create_html_report(df, quality_score, missing_values, file_info, filename):
         <div class="header">
             <img src="data:image/png;base64,{encoded_string}" alt="Greind Logo" class="logo">
             <h1 class="title">Data Quality Report</h1>
-            <div></div>
         </div>
         
-        <div class="info">
-            <p>Report generated on: {date_time}</p>
-            <p>Source file: {filename}</p>
-        </div>
-        
-        <div class="score">{quality_score:.1f}%</div>
-        
-        <h2>File Information</h2>
-        <table>
-            <tr>
-                <th>Metric</th>
-                <th>Value</th>
-            </tr>
+        <div class="container">
+            <div class="info-box">
+                <p><strong>Report generated on:</strong> {date_time}</p>
+                <p><strong>Source file:</strong> {filename}</p>
+                <p class="generated-by">Generated by Greind Data Toolbox v1.1.2</p>
+            </div>
+            
+            <div class="score-container">
+                <div class="score-circle">
+                    <div class="score-number">{quality_score:.1f}%</div>
+                </div>
+                <div class="score-label">Data Quality Score</div>
+                <div class="score-description">
+                    {'Your data quality is excellent! Only minor improvements needed.' if quality_score >= 80
+                    else 'Your data quality needs some attention. Consider addressing the issues highlighted below.' if quality_score >= 60
+                    else 'Your data quality needs significant improvement. Please review the issues detailed below.'}
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">
+                    <i>📊</i> File Information
+                </h2>
+                <table>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                    </tr>
     """
     
-    # Add file information rows
+    # Add file information rows with icons
+    icons = {
+        'Number of rows': '📝',
+        'Number of columns': '📊',
+        'Total missing values': '❓',
+        'Missing value percentage': '📉'
+    }
+    
     for metric in file_info.index:
         value = file_info.loc[metric, 'Value']
+        icon = icons.get(metric, '📌')
         html_content += f"""
             <tr>
-                <td>{metric}</td>
+                <td><span class="metric-icon">{icon}</span>{metric}</td>
                 <td>{value}</td>
             </tr>
         """
     
     html_content += """
-        </table>
-        
-        <h2>Missing Values Summary</h2>
-        <table>
-            <tr>
-                <th>Column</th>
-                <th>Missing Count</th>
-                <th>Quality</th>
-            </tr>
+                </table>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">
+                    <i>🔍</i> Missing Values Summary
+                </h2>
+                <table>
+                    <tr>
+                        <th>Column</th>
+                        <th>Missing Count</th>
+                        <th>Quality</th>
+                    </tr>
     """
     
     for col in df.columns:
@@ -290,14 +370,16 @@ def create_html_report(df, quality_score, missing_values, file_info, filename):
             
             html_content += f"""
                 <tr>
-                    <td>{col}</td>
+                    <td><span class="metric-icon">📋</span>{col}</td>
                     <td>{missing}</td>
                     <td>{indicator}</td>
                 </tr>
             """
     
     html_content += """
-        </table>
+                </table>
+            </div>
+        </div>
     </body>
     </html>
     """

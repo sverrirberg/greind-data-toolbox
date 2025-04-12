@@ -72,7 +72,7 @@ def log_feedback(description, predicted_code, correct_code):
         entry.to_csv(log_file, index=False)
 
 # --- Sidebar Menu ---
-mode = st.sidebar.radio("Choose a Tool:", ["🧪 CSV Profiling (YData)", "🔍 UNSPSC LLM Training"])
+mode = st.sidebar.radio("Choose a Tool:", ["🧪 CSV Profiling (YData)", "🔍 UNSPSC LLM Training", "📊 NAICS Project"])
 
 # === YData Profiling ===
 if mode == "🧪 CSV Profiling (YData)":
@@ -196,3 +196,8 @@ elif mode == "🔍 UNSPSC LLM Training":
                             st.success("✅ Model retrained successfully!")
                         except subprocess.CalledProcessError as e:
                             st.error(f"❌ Error retraining model: {str(e)}")
+
+# === NAICS Project ===
+elif mode == "📊 NAICS Project":
+    st.header("📊 NAICS Project")
+    st.write("This tool is under development and will be available soon.")

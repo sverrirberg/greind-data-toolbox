@@ -12,7 +12,11 @@ import subprocess
 import matplotlib.pyplot as plt
 import seaborn as sns
 from PIL import Image
-from fpdf2 import FPDF
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -236,7 +240,7 @@ if mode == "🧪 CSV Profiling (YData)":
                 if st.button("📥 Download PDF Report"):
                     pdf = create_pdf_report(df, quality_score, missing_values, file_info)
                     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-                        pdf.output(tmp_file.name)
+                        pdf.build(tmp_file.name)
                         with open(tmp_file.name, "rb") as f:
                             st.download_button(
                                 label="⬇️ Download PDF",
@@ -256,7 +260,7 @@ if mode == "🧪 CSV Profiling (YData)":
                     if email:
                         pdf = create_pdf_report(df, quality_score, missing_values, file_info)
                         with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-                            pdf.output(tmp_file.name)
+                            pdf.build(tmp_file.name)
                             if send_email(email, "Data Quality Report", "Please find attached the data quality report.", tmp_file.name):
                                 st.success("Report sent successfully!")
                             os.unlink(tmp_file.name)
@@ -468,39 +472,84 @@ elif mode == "🔍 UNSPSC LLM Training":
                             st.error(f"❌ Error retraining model: {str(e)}")
 
 def create_pdf_report(df, quality_score, missing_values, file_info):
-    pdf = FPDF()
-    pdf.add_page()
+    # Create PDF document
+    doc = SimpleDocTemplate("data_quality_report.pdf", pagesize=letter)
+    styles = getSampleStyleSheet()
+    elements = []
     
     # Add title
-    pdf.set_font("Arial", "B", 24)
-    pdf.cell(200, 10, "Data Quality Report", ln=True, align="C")
-    pdf.ln(20)
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=24,
+        spaceAfter=30,
+        alignment=1  # Center alignment
+    )
+    elements.append(Paragraph("Data Quality Report", title_style))
     
     # Add quality score
-    pdf.set_font("Arial", "B", 48)
-    pdf.cell(200, 20, f"{quality_score:.1f}%", ln=True, align="C")
-    pdf.ln(10)
+    score_style = ParagraphStyle(
+        'ScoreStyle',
+        parent=styles['Normal'],
+        fontSize=48,
+        textColor=colors.blue,
+        alignment=1
+    )
+    elements.append(Paragraph(f"{quality_score:.1f}%", score_style))
+    elements.append(Spacer(1, 20))
     
     # Add file information
-    pdf.set_font("Arial", "B", 16)
-    pdf.cell(200, 10, "File Information", ln=True)
-    pdf.set_font("Arial", "", 12)
+    elements.append(Paragraph("File Information", styles['Heading2']))
+    file_data = [['Metric', 'Value']]
     for metric, value in file_info.items():
-        pdf.cell(100, 10, metric, 0)
-        pdf.cell(100, 10, str(value), ln=True)
+        file_data.append([metric, str(value)])
+    
+    file_table = Table(file_data)
+    file_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 14),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 1), (-1, -1), 12),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ]))
+    elements.append(file_table)
+    elements.append(Spacer(1, 20))
     
     # Add missing values information
-    pdf.ln(10)
-    pdf.set_font("Arial", "B", 16)
-    pdf.cell(200, 10, "Missing Values Summary", ln=True)
-    pdf.set_font("Arial", "", 12)
+    elements.append(Paragraph("Missing Values Summary", styles['Heading2']))
+    missing_data = [['Column', 'Missing Count', 'Missing %']]
     for col in df.columns:
         missing = df[col].isnull().sum()
         if missing > 0:
-            pdf.cell(100, 10, col, 0)
-            pdf.cell(100, 10, f"{missing} ({missing/len(df)*100:.1f}%)", ln=True)
+            missing_data.append([col, str(missing), f"{missing/len(df)*100:.1f}%"])
     
-    return pdf
+    missing_table = Table(missing_data)
+    missing_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 14),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 1), (-1, -1), 12),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ]))
+    elements.append(missing_table)
+    
+    # Build PDF
+    doc.build(elements)
+    return doc
 
 def send_email(receiver_email, subject, body, attachment_path=None):
     sender_email = os.getenv("EMAIL_USER")

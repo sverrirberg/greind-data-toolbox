@@ -235,38 +235,15 @@ if mode == "🧪 CSV Profiling (YData)":
                 </div>
                 """, unsafe_allow_html=True)
             
-            # Add download and email options
-            col1, col2 = st.columns(2)
-            with col1:
-                if st.button("📥 Download PDF Report"):
-                    pdf = create_pdf_report(df, quality_score, missing_values, file_info)
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-                        pdf.build(tmp_file.name)
-                        with open(tmp_file.name, "rb") as f:
-                            st.download_button(
-                                label="⬇️ Download PDF",
-                                data=f,
-                                file_name="data_quality_report.pdf",
-                                mime="application/pdf"
-                            )
-            
-            with col2:
-                st.markdown("""
-                <div style='margin-top: 1rem;'>
-                    <h4>📧 Email Report</h4>
-                </div>
-                """, unsafe_allow_html=True)
-                email = st.text_input("Enter email address")
-                if st.button("Send Report"):
-                    if email:
-                        pdf = create_pdf_report(df, quality_score, missing_values, file_info)
-                        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-                            pdf.build(tmp_file.name)
-                            if send_email(email, "Data Quality Report", "Please find attached the data quality report.", tmp_file.name):
-                                st.success("Report sent successfully!")
-                            os.unlink(tmp_file.name)
-                    else:
-                        st.warning("Please enter an email address")
+            # Add HTML download button
+            if st.button("📥 Download HTML Report"):
+                html_content = create_html_report(df, quality_score, missing_values, file_info)
+                st.download_button(
+                    label="⬇️ Download HTML",
+                    data=html_content,
+                    file_name="data_quality_report.html",
+                    mime="text/html"
+                )
             
             st.markdown("</div>", unsafe_allow_html=True)
         
@@ -472,16 +449,13 @@ elif mode == "🔍 UNSPSC LLM Training":
                         except subprocess.CalledProcessError as e:
                             st.error(f"❌ Error retraining model: {str(e)}")
 
-def create_pdf_report(df, quality_score, missing_values, file_info):
+def create_html_report(df, quality_score, missing_values, file_info):
     # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
     <html>
     <head>
         <style>
-            @page {{
-                margin: 1cm;
-            }}
             body {{
                 font-family: Arial, sans-serif;
                 margin: 40px;
@@ -567,9 +541,7 @@ def create_pdf_report(df, quality_score, missing_values, file_info):
     </html>
     """
     
-    # Convert HTML to PDF
-    HTML(string=html_content).write_pdf("data_quality_report.pdf")
-    return "data_quality_report.pdf"
+    return html_content
 
 def send_email(receiver_email, subject, body, attachment_path=None):
     sender_email = os.getenv("EMAIL_USER")

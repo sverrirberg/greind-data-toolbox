@@ -76,7 +76,7 @@ mode = st.sidebar.radio("Choose a Tool:", ["🧪 CSV Profiling (YData)", "🔍 U
 
 # === YData Profiling ===
 if mode == "🧪 CSV Profiling (YData)":
-    st.header("🧪 CSV Data Profiler")
+    st.markdown("<h1 style='text-align: center;'>🧪 CSV Data Profiler</h1>", unsafe_allow_html=True)
     
     # Information text
     st.markdown("""
@@ -125,7 +125,24 @@ if mode == "🧪 CSV Profiling (YData)":
             show_samples = st.checkbox("Show samples", value=True)
         
         # Generate report button
-        if st.button("PROFILE CSV"):
+        st.markdown("""
+        <style>
+        .stButton>button {
+            width: 100%;
+            height: 3em;
+            font-size: 1.2em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .stButton>button:hover {
+            background-color: #45a049;
+        }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        if st.button("PROFILE CSV", key="profile_button"):
             with st.spinner("Generating report..."):
                 # Generate and show report
                 profile = ProfileReport(

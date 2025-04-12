@@ -9,6 +9,18 @@ import os
 import datetime
 import tempfile
 import subprocess
+import matplotlib.pyplot as plt
+import seaborn as sns
+from PIL import Image
+from fpdf import FPDF
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 st.set_page_config(
     page_title="Greind Data Toolbox",
@@ -16,8 +28,6 @@ st.set_page_config(
     page_icon="src/app/assets/favicon-32x32.png"
 )
 st.title("")
-
-from PIL import Image
 
 # Load the logo
 logo_path = "src/app/assets/Logo_Greind_Horizontal.png"
@@ -219,12 +229,46 @@ if mode == "🧪 CSV Profiling (YData)":
                     </ul>
                 </div>
                 """, unsafe_allow_html=True)
+            
+            # Add download and email options
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("📥 Download PDF Report"):
+                    pdf = create_pdf_report(df, quality_score, missing_values, file_info)
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+                        pdf.output(tmp_file.name)
+                        with open(tmp_file.name, "rb") as f:
+                            st.download_button(
+                                label="⬇️ Download PDF",
+                                data=f,
+                                file_name="data_quality_report.pdf",
+                                mime="application/pdf"
+                            )
+            
+            with col2:
+                st.markdown("""
+                <div style='margin-top: 1rem;'>
+                    <h4>📧 Email Report</h4>
+                </div>
+                """, unsafe_allow_html=True)
+                email = st.text_input("Enter email address")
+                if st.button("Send Report"):
+                    if email:
+                        pdf = create_pdf_report(df, quality_score, missing_values, file_info)
+                        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+                            pdf.output(tmp_file.name)
+                            if send_email(email, "Data Quality Report", "Please find attached the data quality report.", tmp_file.name):
+                                st.success("Report sent successfully!")
+                            os.unlink(tmp_file.name)
+                    else:
+                        st.warning("Please enter an email address")
+            
             st.markdown("</div>", unsafe_allow_html=True)
         
         # Show file information in a table
         with st.container():
             st.markdown("<div class='section'>", unsafe_allow_html=True)
-            st.subheader("📊 File Information")
+            st.subheader("💡 File Information")
             st.markdown("<p class='info-text'>Basic information about your dataset</p>", unsafe_allow_html=True)
             file_info = pd.DataFrame({
                 'Metric': ['Number of rows', 'Number of columns', 'Total missing values', 'Missing value percentage'],
@@ -422,3 +466,66 @@ elif mode == "🔍 UNSPSC LLM Training":
                             st.success("✅ Model retrained successfully!")
                         except subprocess.CalledProcessError as e:
                             st.error(f"❌ Error retraining model: {str(e)}")
+
+def create_pdf_report(df, quality_score, missing_values, file_info):
+    pdf = FPDF()
+    pdf.add_page()
+    
+    # Add title
+    pdf.set_font("Arial", "B", 24)
+    pdf.cell(200, 10, "Data Quality Report", ln=True, align="C")
+    pdf.ln(20)
+    
+    # Add quality score
+    pdf.set_font("Arial", "B", 48)
+    pdf.cell(200, 20, f"{quality_score:.1f}%", ln=True, align="C")
+    pdf.ln(10)
+    
+    # Add file information
+    pdf.set_font("Arial", "B", 16)
+    pdf.cell(200, 10, "File Information", ln=True)
+    pdf.set_font("Arial", "", 12)
+    for metric, value in file_info.items():
+        pdf.cell(100, 10, metric, 0)
+        pdf.cell(100, 10, str(value), ln=True)
+    
+    # Add missing values information
+    pdf.ln(10)
+    pdf.set_font("Arial", "B", 16)
+    pdf.cell(200, 10, "Missing Values Summary", ln=True)
+    pdf.set_font("Arial", "", 12)
+    for col in df.columns:
+        missing = df[col].isnull().sum()
+        if missing > 0:
+            pdf.cell(100, 10, col, 0)
+            pdf.cell(100, 10, f"{missing} ({missing/len(df)*100:.1f}%)", ln=True)
+    
+    return pdf
+
+def send_email(receiver_email, subject, body, attachment_path=None):
+    sender_email = os.getenv("EMAIL_USER")
+    password = os.getenv("EMAIL_PASSWORD")
+    
+    msg = MIMEMultipart()
+    msg["From"] = sender_email
+    msg["To"] = receiver_email
+    msg["Subject"] = subject
+    
+    msg.attach(MIMEText(body, "plain"))
+    
+    if attachment_path:
+        with open(attachment_path, "rb") as f:
+            attach = MIMEApplication(f.read(), _subtype="pdf")
+            attach.add_header("Content-Disposition", "attachment", filename="data_quality_report.pdf")
+            msg.attach(attach)
+    
+    try:
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login(sender_email, password)
+        server.send_message(msg)
+        server.quit()
+        return True
+    except Exception as e:
+        st.error(f"Error sending email: {str(e)}")
+        return False

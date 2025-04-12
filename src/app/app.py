@@ -12,10 +12,6 @@ import subprocess
 import matplotlib.pyplot as plt
 import seaborn as sns
 from PIL import Image
-from dotenv import load_dotenv
-
-# Load environment variables
-load_dotenv()
 
 st.set_page_config(
     page_title="Greind Data Toolbox",

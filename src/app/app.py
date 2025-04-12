@@ -63,23 +63,6 @@ st.markdown("""
         font-size: 0.9em;
         margin-top: 0.5rem;
     }
-    .quality-score {
-        font-size: 12em;
-        font-weight: bold;
-        margin: 0;
-        padding: 0;
-        text-align: center;
-        line-height: 1;
-        color: #333;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    }
-    .quality-label {
-        color: #666;
-        font-size: 1.2em;
-        margin-top: -1rem;
-        text-align: center;
-        font-weight: 500;
-    }
     .score-card {
         background: white;
         border-radius: 15px;
@@ -91,6 +74,21 @@ st.markdown("""
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+    .big-number {
+        font-size: 15vw;
+        font-weight: bold;
+        line-height: 1;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        color: #333;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    @media (min-width: 1200px) {
+        .big-number {
+            font-size: 180px;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -202,9 +200,9 @@ if mode == "🧪 CSV Profiling (YData)":
             with col1:
                 st.markdown(f"""
                 <div class='score-card'>
-                    <p class='quality-score' style='color: {'#4CAF50' if quality_score >= 80 else '#FFC107' if quality_score >= 60 else '#F44336'};'>
+                    <div class='big-number' style='color: {'#4CAF50' if quality_score >= 80 else '#FFC107' if quality_score >= 60 else '#F44336'};'>
                         {quality_score:.1f}%
-                    </p>
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
             with col2:

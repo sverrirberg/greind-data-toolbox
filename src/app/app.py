@@ -106,7 +106,8 @@ if mode == "🧪 CSV Profiling (YData)":
         st.subheader("📋 Column Names")
         columns_df = pd.DataFrame({
             'Column Name': df.columns,
-            'Data Type': df.dtypes.astype(str)
+            'Data Type': df.dtypes.astype(str),
+            'Missing Values': df.isnull().sum()
         })
         st.table(columns_df)
         

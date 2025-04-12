@@ -130,6 +130,100 @@ def load_unspsc_mapping():
     df["unspsc_code"] = df["unspsc_code"].astype(str).str.zfill(6)
     return df.set_index("unspsc_code")["description"].to_dict()
 
+def create_html_report(df, quality_score, missing_values, file_info):
+    # Create HTML content
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                margin: 40px;
+            }}
+            h1 {{
+                text-align: center;
+                color: #333;
+            }}
+            .score {{
+                font-size: 48px;
+                color: blue;
+                text-align: center;
+                margin: 20px 0;
+            }}
+            h2 {{
+                color: #444;
+                margin-top: 30px;
+            }}
+            table {{
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }}
+            th, td {{
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }}
+            th {{
+                background-color: #f2f2f2;
+            }}
+            tr:nth-child(even) {{
+                background-color: #f9f9f9;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Data Quality Report</h1>
+        <div class="score">{quality_score:.1f}%</div>
+        
+        <h2>File Information</h2>
+        <table>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+    """
+    
+    for metric, value in file_info.items():
+        html_content += f"""
+            <tr>
+                <td>{metric}</td>
+                <td>{value}</td>
+            </tr>
+        """
+    
+    html_content += """
+        </table>
+        
+        <h2>Missing Values Summary</h2>
+        <table>
+            <tr>
+                <th>Column</th>
+                <th>Missing Count</th>
+                <th>Missing %</th>
+            </tr>
+    """
+    
+    for col in df.columns:
+        missing = df[col].isnull().sum()
+        if missing > 0:
+            html_content += f"""
+                <tr>
+                    <td>{col}</td>
+                    <td>{missing}</td>
+                    <td>{missing/len(df)*100:.1f}%</td>
+                </tr>
+            """
+    
+    html_content += """
+        </table>
+    </body>
+    </html>
+    """
+    
+    return html_content
+
 model, encoder = load_model()
 bert = load_bert()
 unspsc_map = load_unspsc_mapping()
@@ -445,97 +539,3 @@ elif mode == "🔍 UNSPSC LLM Training":
                             st.success("✅ Model retrained successfully!")
                         except subprocess.CalledProcessError as e:
                             st.error(f"❌ Error retraining model: {str(e)}")
-
-def create_html_report(df, quality_score, missing_values, file_info):
-    # Create HTML content
-    html_content = f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <style>
-            body {{
-                font-family: Arial, sans-serif;
-                margin: 40px;
-            }}
-            h1 {{
-                text-align: center;
-                color: #333;
-            }}
-            .score {{
-                font-size: 48px;
-                color: blue;
-                text-align: center;
-                margin: 20px 0;
-            }}
-            h2 {{
-                color: #444;
-                margin-top: 30px;
-            }}
-            table {{
-                width: 100%;
-                border-collapse: collapse;
-                margin: 20px 0;
-            }}
-            th, td {{
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-            }}
-            th {{
-                background-color: #f2f2f2;
-            }}
-            tr:nth-child(even) {{
-                background-color: #f9f9f9;
-            }}
-        </style>
-    </head>
-    <body>
-        <h1>Data Quality Report</h1>
-        <div class="score">{quality_score:.1f}%</div>
-        
-        <h2>File Information</h2>
-        <table>
-            <tr>
-                <th>Metric</th>
-                <th>Value</th>
-            </tr>
-    """
-    
-    for metric, value in file_info.items():
-        html_content += f"""
-            <tr>
-                <td>{metric}</td>
-                <td>{value}</td>
-            </tr>
-        """
-    
-    html_content += """
-        </table>
-        
-        <h2>Missing Values Summary</h2>
-        <table>
-            <tr>
-                <th>Column</th>
-                <th>Missing Count</th>
-                <th>Missing %</th>
-            </tr>
-    """
-    
-    for col in df.columns:
-        missing = df[col].isnull().sum()
-        if missing > 0:
-            html_content += f"""
-                <tr>
-                    <td>{col}</td>
-                    <td>{missing}</td>
-                    <td>{missing/len(df)*100:.1f}%</td>
-                </tr>
-            """
-    
-    html_content += """
-        </table>
-    </body>
-    </html>
-    """
-    
-    return html_content

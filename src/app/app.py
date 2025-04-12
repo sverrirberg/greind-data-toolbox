@@ -130,7 +130,11 @@ def load_unspsc_mapping():
     df["unspsc_code"] = df["unspsc_code"].astype(str).str.zfill(6)
     return df.set_index("unspsc_code")["description"].to_dict()
 
-def create_html_report(df, quality_score, missing_values, file_info):
+def create_html_report(df, quality_score, missing_values, file_info, filename):
+    # Get current date and time
+    now = datetime.datetime.now()
+    date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+    
     # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
@@ -141,9 +145,23 @@ def create_html_report(df, quality_score, missing_values, file_info):
                 font-family: Arial, sans-serif;
                 margin: 40px;
             }}
-            h1 {{
+            .header {{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+            }}
+            .logo {{
+                height: 50px;
+            }}
+            .title {{
                 text-align: center;
                 color: #333;
+            }}
+            .info {{
+                text-align: center;
+                color: #666;
+                margin-bottom: 20px;
             }}
             .score {{
                 font-size: 48px;
@@ -192,7 +210,17 @@ def create_html_report(df, quality_score, missing_values, file_info):
         </style>
     </head>
     <body>
-        <h1>Data Quality Report</h1>
+        <div class="header">
+            <img src="src/app/assets/Logo_Greind_Horizontal.png" alt="Greind Logo" class="logo">
+            <h1 class="title">Data Quality Report</h1>
+            <div></div>
+        </div>
+        
+        <div class="info">
+            <p>Report generated on: {date_time}</p>
+            <p>Source file: {filename}</p>
+        </div>
+        
         <div class="score">{quality_score:.1f}%</div>
         
         <h2>File Information</h2>
@@ -356,7 +384,7 @@ if mode == "🧪 CSV Profiling (YData)":
             st.table(file_info)
             
             # Add HTML download button
-            html_content = create_html_report(df, quality_score, missing_values, file_info)
+            html_content = create_html_report(df, quality_score, missing_values, file_info, profiling_file.name)
             st.download_button(
                 label="⬇️ Download HTML Report",
                 data=html_content,

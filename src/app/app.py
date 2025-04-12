@@ -200,4 +200,10 @@ elif mode == "🔍 UNSPSC LLM Training":
 # === NAICS Project ===
 elif mode == "📊 NAICS Project":
     st.header("📊 NAICS Project")
-    st.write("This tool is under development and will be available soon.")
+    st.markdown("""
+        <a href="https://naics-project.streamlit.app" target="_blank">
+            <button style="background-color: #FF4B4B; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                Open NAICS Project in New Tab
+            </button>
+        </a>
+    """, unsafe_allow_html=True)

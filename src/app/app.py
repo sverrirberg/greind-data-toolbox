@@ -105,10 +105,9 @@ if mode == "🧪 CSV Profiling (YData)":
         # Show column names in a table
         st.subheader("📋 Column Names")
         columns_df = pd.DataFrame({
-            'Column Name': df.columns,
             'Data Type': df.dtypes.astype(str),
             'Missing Values': df.isnull().sum()
-        })
+        }, index=df.columns)
         st.table(columns_df)
         
         # Show data preview

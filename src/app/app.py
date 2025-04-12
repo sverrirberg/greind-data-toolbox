@@ -22,6 +22,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 from dotenv import load_dotenv
+import pdfkit
 
 # Load environment variables
 load_dotenv()
@@ -472,84 +473,84 @@ elif mode == "🔍 UNSPSC LLM Training":
                             st.error(f"❌ Error retraining model: {str(e)}")
 
 def create_pdf_report(df, quality_score, missing_values, file_info):
-    # Create PDF document
-    doc = SimpleDocTemplate("data_quality_report.pdf", pagesize=letter)
-    styles = getSampleStyleSheet()
-    elements = []
+    # Create HTML content
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ font-family: Arial, sans-serif; margin: 40px; }}
+            h1 {{ text-align: center; color: #333; }}
+            .score {{ font-size: 48px; color: blue; text-align: center; margin: 20px 0; }}
+            h2 {{ color: #444; margin-top: 30px; }}
+            table {{ width: 100%; border-collapse: collapse; margin: 20px 0; }}
+            th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
+            th {{ background-color: #f2f2f2; }}
+            tr:nth-child(even) {{ background-color: #f9f9f9; }}
+        </style>
+    </head>
+    <body>
+        <h1>Data Quality Report</h1>
+        <div class="score">{quality_score:.1f}%</div>
+        
+        <h2>File Information</h2>
+        <table>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+    """
     
-    # Add title
-    title_style = ParagraphStyle(
-        'CustomTitle',
-        parent=styles['Heading1'],
-        fontSize=24,
-        spaceAfter=30,
-        alignment=1  # Center alignment
-    )
-    elements.append(Paragraph("Data Quality Report", title_style))
-    
-    # Add quality score
-    score_style = ParagraphStyle(
-        'ScoreStyle',
-        parent=styles['Normal'],
-        fontSize=48,
-        textColor=colors.blue,
-        alignment=1
-    )
-    elements.append(Paragraph(f"{quality_score:.1f}%", score_style))
-    elements.append(Spacer(1, 20))
-    
-    # Add file information
-    elements.append(Paragraph("File Information", styles['Heading2']))
-    file_data = [['Metric', 'Value']]
     for metric, value in file_info.items():
-        file_data.append([metric, str(value)])
+        html_content += f"""
+            <tr>
+                <td>{metric}</td>
+                <td>{value}</td>
+            </tr>
+        """
     
-    file_table = Table(file_data)
-    file_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 14),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-        ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
-        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
-        ('FONTSIZE', (0, 1), (-1, -1), 12),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black)
-    ]))
-    elements.append(file_table)
-    elements.append(Spacer(1, 20))
+    html_content += """
+        </table>
+        
+        <h2>Missing Values Summary</h2>
+        <table>
+            <tr>
+                <th>Column</th>
+                <th>Missing Count</th>
+                <th>Missing %</th>
+            </tr>
+    """
     
-    # Add missing values information
-    elements.append(Paragraph("Missing Values Summary", styles['Heading2']))
-    missing_data = [['Column', 'Missing Count', 'Missing %']]
     for col in df.columns:
         missing = df[col].isnull().sum()
         if missing > 0:
-            missing_data.append([col, str(missing), f"{missing/len(df)*100:.1f}%"])
+            html_content += f"""
+                <tr>
+                    <td>{col}</td>
+                    <td>{missing}</td>
+                    <td>{missing/len(df)*100:.1f}%</td>
+                </tr>
+            """
     
-    missing_table = Table(missing_data)
-    missing_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 14),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-        ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
-        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
-        ('FONTSIZE', (0, 1), (-1, -1), 12),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black)
-    ]))
-    elements.append(missing_table)
+    html_content += """
+        </table>
+    </body>
+    </html>
+    """
     
-    # Build PDF
-    doc.build(elements)
-    return doc
+    # Convert HTML to PDF
+    options = {
+        'page-size': 'Letter',
+        'margin-top': '0.75in',
+        'margin-right': '0.75in',
+        'margin-bottom': '0.75in',
+        'margin-left': '0.75in',
+        'encoding': "UTF-8",
+        'no-outline': None
+    }
+    
+    pdfkit.from_string(html_content, "data_quality_report.pdf", options=options)
+    return "data_quality_report.pdf"
 
 def send_email(receiver_email, subject, body, attachment_path=None):
     sender_email = os.getenv("EMAIL_USER")

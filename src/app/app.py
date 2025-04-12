@@ -578,9 +578,8 @@ if mode == "🧪 CSV Profiling (YData)":
                 div[data-testid="stDownloadButton"] {
                     margin-top: 35px;
                     padding-top: 20px;
-                    text-align: right;
-                    position: relative;
-                    float: right;
+                    margin-left: 0%;
+                    width: 100%;
                 }
                 </style>
                 """, unsafe_allow_html=True)

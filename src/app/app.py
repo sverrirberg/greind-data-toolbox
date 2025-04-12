@@ -64,11 +64,12 @@ st.markdown("""
         margin-top: 0.5rem;
     }
     .quality-score {
-        font-size: 3em;
+        font-size: 5em;
         font-weight: bold;
         margin: 0;
         padding: 0;
         text-align: center;
+        line-height: 1.2;
     }
     .quality-label {
         color: #666;
@@ -302,7 +303,7 @@ if mode == "🧪 CSV Profiling (YData)":
             st.markdown("</div>", unsafe_allow_html=True)
         
         # Generate report button
-        if st.button("📊 Detailed Analysis", key="profile_button"):
+        if st.button("⚙️ Detailed Analysis", key="profile_button"):
             with st.spinner("Generating detailed analysis..."):
                 profile = ProfileReport(
                     df,

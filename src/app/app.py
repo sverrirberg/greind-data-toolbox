@@ -156,312 +156,89 @@ def find_outliers(df):
     return outliers_info
 
 def create_html_report(df, quality_score, missing_values, file_info, filename):
-    # Get current date and time
-    now = datetime.datetime.now()
-    date_time = now.strftime("%Y-%m-%d %H:%M:%S")
-    
-    # Get duplicates information
+    # Calculate duplicates
     duplicate_count, duplicate_percentage = find_duplicates(df)
     
-    # Get outliers information
+    # Calculate outliers
     outliers_info = find_outliers(df)
     
-    # Convert logo to base64
-    with open("src/app/assets/Logo_Greind_Horizontal.png", "rb") as image_file:
-        encoded_string = base64.b64encode(image_file.read()).decode()
-    
-    # Create HTML content
     html_content = f"""
-    <!DOCTYPE html>
     <html>
     <head>
+        <title>Data Quality Report</title>
         <style>
-            body {{
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f8f9fa;
-            }}
-            .container {{
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
-            }}
-            .header {{
-                background-color: white;
-                padding: 20px 40px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                margin-bottom: 30px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }}
-            .logo {{
-                height: 60px;
-            }}
-            .title {{
-                color: #333;
-                font-size: 24px;
-                margin: 0;
-            }}
-            .info-box {{
-                background-color: white;
-                border-radius: 10px;
-                padding: 20px;
-                margin-bottom: 30px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }}
-            .info-box p {{
-                margin: 5px 0;
-                color: #666;
-                font-size: 14px;
-            }}
-            .info-box .generated-by {{
-                color: #999;
-                font-size: 12px;
-                margin-top: 10px;
-            }}
-            .score-container {{
-                text-align: center;
-                margin-bottom: 30px;
-            }}
-            .score-circle {{
-                width: 200px;
-                height: 200px;
-                border-radius: 50%;
-                margin: 0 auto;
-                position: relative;
-                background: {'#4CAF50' if quality_score >= 80 else '#FFC107' if quality_score >= 60 else '#F44336'};
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            }}
-            .score-number {{
-                font-size: 48px;
-                font-weight: bold;
-                color: white;
-            }}
-            .score-label {{
-                margin-top: 15px;
-                font-size: 18px;
-                color: #666;
-            }}
-            .score-description {{
-                margin-top: 10px;
-                color: #666;
-                font-size: 14px;
-                max-width: 600px;
-                margin-left: auto;
-                margin-right: auto;
-            }}
-            .section {{
-                background-color: white;
-                border-radius: 10px;
-                padding: 25px;
-                margin-bottom: 30px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }}
-            .section-title {{
-                color: #333;
-                font-size: 20px;
-                margin: 0 0 20px 0;
-                display: flex;
-                align-items: center;
-            }}
-            .section-title i {{
-                margin-right: 10px;
-                color: #666;
-            }}
-            table {{
-                width: 100%;
-                border-collapse: collapse;
-                margin: 20px 0;
-                background-color: white;
-            }}
-            th, td {{
-                padding: 15px;
-                text-align: left;
-                border-bottom: 1px solid #eee;
-            }}
-            th {{
-                background-color: #f8f9fa;
-                font-weight: 600;
-                color: #333;
-            }}
-            tr:hover {{
-                background-color: #f8f9fa;
-            }}
-            .metric-icon {{
-                color: #666;
-                margin-right: 10px;
-            }}
-            .indicator {{
-                display: inline-block;
-                padding: 6px 12px;
-                border-radius: 20px;
-                font-weight: 500;
-                font-size: 14px;
-            }}
-            .excellent {{
-                background-color: #4CAF50;
-                color: white;
-            }}
-            .attention {{
-                background-color: #FFC107;
-                color: black;
-            }}
-            .poor {{
-                background-color: #F44336;
-                color: white;
-            }}
+            body {{ font-family: Arial, sans-serif; margin: 40px; }}
+            .header {{ text-align: center; margin-bottom: 30px; }}
+            .section {{ margin-bottom: 30px; }}
+            .score {{ font-size: 48px; color: {'#4CAF50' if quality_score >= 80 else '#FFC107' if quality_score >= 60 else '#F44336'}; }}
+            table {{ width: 100%; border-collapse: collapse; margin: 15px 0; }}
+            th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
+            th {{ background-color: #f5f5f5; }}
         </style>
     </head>
     <body>
         <div class="header">
-            <img src="data:image/png;base64,{encoded_string}" alt="Greind Logo" class="logo">
-            <h1 class="title">Data Quality Report</h1>
+            <h1>Data Quality Report</h1>
+            <p>File: {filename}</p>
         </div>
         
-        <div class="container">
-            <div class="info-box">
-                <p><strong>Report generated on:</strong> {date_time}</p>
-                <p><strong>Source file:</strong> {filename}</p>
-                <p class="generated-by">Generated by Greind Data Toolbox v1.1.2</p>
-            </div>
-            
-            <div class="score-container">
-                <div class="score-circle">
-                    <div class="score-number">{quality_score:.1f}%</div>
-                </div>
-                <div class="score-label">Data Quality Score</div>
-                <div class="score-description">
-                    {'Your data quality is excellent! Only minor improvements needed.' if quality_score >= 80
-                    else 'Your data quality needs some attention. Consider addressing the issues highlighted below.' if quality_score >= 60
-                    else 'Your data quality needs significant improvement. Please review the issues detailed below.'}
-                </div>
-            </div>
-            
-            <div class="section">
-                <h2 class="section-title">
-                    <i>📊</i> File Information
-                </h2>
-                <table>
-                    <tr>
-                        <th>Metric</th>
-                        <th>Value</th>
-                    </tr>
-    """
-    
-    # Add file information rows with icons
-    icons = {
-        'Number of rows': '📝',
-        'Number of columns': '📊',
-        'Total missing values': '❓',
-        'Missing value percentage': '📉'
-    }
-    
-    for metric in file_info.index:
-        value = file_info.loc[metric, 'Value']
-        icon = icons.get(metric, '📌')
-        html_content += f"""
-            <tr>
-                <td><span class="metric-icon">{icon}</span>{metric}</td>
-                <td>{value}</td>
-            </tr>
-        """
-    
-    html_content += """
-                </table>
-            </div>
-            
-            <div class="section">
-                <h2 class="section-title">
-                    <i>🔍</i> Missing Values Summary
-                </h2>
-                <table>
-                    <tr>
-                        <th>Column</th>
-                        <th>Missing Count</th>
-                        <th>Quality</th>
-                    </tr>
-    """
-    
-    for col in df.columns:
-        missing = df[col].isnull().sum()
-        if missing > 0:
-            missing_percent = missing/len(df)*100
-            if missing_percent < 5:
-                indicator = '<span class="indicator excellent">🟢 Excellent</span>'
-            elif missing_percent < 20:
-                indicator = '<span class="indicator attention">🟡 Needs Attention</span>'
-            else:
-                indicator = '<span class="indicator poor">🔴 Poor</span>'
-            
-            html_content += f"""
+        <div class="section">
+            <h2>Data Quality Score</h2>
+            <div class="score">{quality_score:.1f}%</div>
+        </div>
+        
+        <div class="section">
+            <h2>Data Quality Issues</h2>
+            <table>
                 <tr>
-                    <td><span class="metric-icon">📋</span>{col}</td>
-                    <td>{missing}</td>
-                    <td>{indicator}</td>
+                    <th>Issue Type</th>
+                    <th>Count</th>
+                    <th>Percentage</th>
+                    <th>Status</th>
                 </tr>
-            """
-    
-    html_content += """
-                </table>
-            </div>
-            
-            <div class="section">
-                <h2 class="section-title">
-                    <i>🔍</i> Data Quality Issues
-                </h2>
-                <table>
-                    <tr>
-                        <th>Issue Type</th>
-                        <th>Count</th>
-                        <th>Percentage</th>
-                        <th>Status</th>
-                    </tr>
-                    <tr>
-                        <td><span class="metric-icon">🔄</span>Duplicate Rows</td>
-                        <td>{duplicate_count}</td>
-                        <td>{duplicate_percentage:.2f}%</td>
-                        <td>{get_status_indicator(duplicate_percentage)}</td>
-                    </tr>
-                </table>
-            </div>
-            
-            <div class="section">
-                <h2 class="section-title">
-                    <i>📊</i> Outliers Analysis
-                </h2>
-                <table>
-                    <tr>
-                        <th>Column</th>
-                        <th>Outliers Count</th>
-                        <th>Percentage</th>
-                        <th>Status</th>
-                    </tr>
-    """
-    
-    for column, info in outliers_info.items():
-        html_content += f"""
-            <tr>
-                <td><span class="metric-icon">📈</span>{column}</td>
-                <td>{info['count']}</td>
-                <td>{info['percentage']:.2f}%</td>
-                <td>{get_status_indicator(info['percentage'])}</td>
-            </tr>
-        """
-    
-    html_content += """
-                </table>
-                <p class="note">Note: Outliers are identified using the z-score method (|z| > 3)</p>
-            </div>
+                <tr>
+                    <td>Duplicate Rows</td>
+                    <td>{duplicate_count}</td>
+                    <td>{duplicate_percentage:.2f}%</td>
+                    <td>{'🟢 Low' if duplicate_percentage < 5 else '🟡 Medium' if duplicate_percentage < 20 else '🔴 High'}</td>
+                </tr>
+                <tr>
+                    <td>Missing Values</td>
+                    <td>{missing_values}</td>
+                    <td>{(missing_values / (len(df) * len(df.columns)) * 100):.2f}%</td>
+                    <td>{'🟢 Low' if (missing_values / (len(df) * len(df.columns)) * 100) < 5 else '🟡 Medium' if (missing_values / (len(df) * len(df.columns)) * 100) < 20 else '🔴 High'}</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="section">
+            <h2>File Information</h2>
+            <table>
+                <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Number of rows</td>
+                    <td>{len(df)}</td>
+                </tr>
+                <tr>
+                    <td>Number of columns</td>
+                    <td>{len(df.columns)}</td>
+                </tr>
+                <tr>
+                    <td>Total missing values</td>
+                    <td>{missing_values}</td>
+                </tr>
+                <tr>
+                    <td>Missing value percentage</td>
+                    <td>{(missing_values / (len(df) * len(df.columns)) * 100):.2f}%</td>
+                </tr>
+            </table>
         </div>
     </body>
     </html>
     """
-    
     return html_content
 
 def get_status_indicator(percentage):

@@ -68,10 +68,32 @@ def log_feedback(description, predicted_code, correct_code):
         entry.to_csv(log_file, index=False)
 
 # --- Sidebar Menu ---
-mode = st.sidebar.radio("Choose a Tool:", ["🔍 UNSPSC LLM Training", "🧪 CSV Profiling (YData)"])
+mode = st.sidebar.radio("Choose a Tool:", ["🧪 CSV Profiling (YData)", "🔍 UNSPSC LLM Training"])
+
+# === YData Profiling ===
+if mode == "🧪 CSV Profiling (YData)":
+    st.header("🧪 Automatic CSV Data Profiler")
+    profiling_file = st.file_uploader("Upload a CSV file to profile", type="csv", key="profile")
+
+    if profiling_file:
+        df = pd.read_csv(profiling_file)
+        st.subheader("📊 Profile Report")
+        profile = ProfileReport(df, title="CSV Data Report", explorative=True)
+        st_profile_report(profile)
+
+        # Save to a temporary HTML file
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp_file:
+            profile.to_file(tmp_file.name)
+            tmp_file.seek(0)
+            st.download_button(
+                label="📥 Download HTML Report",
+                data=tmp_file.read(),
+                file_name="data_profile_report.html",
+                mime="text/html"
+            )
 
 # === UNSPSC Prediction ===
-if mode == "🔍 UNSPSC LLM Training":
+elif mode == "🔍 UNSPSC LLM Training":
     st.header("🔍 UNSPSC LLM Training")
     uploaded_file = st.file_uploader("Upload a CSV with a 'description' column", type=["csv"], key="unspsc")
 
@@ -111,28 +133,6 @@ if mode == "🔍 UNSPSC LLM Training":
         if feedback:
             log_feedback(input_text, code, feedback)
             st.success("📩 Feedback saved. Thank you!")
-
-# === YData Profiling ===
-elif mode == "🧪 CSV Profiling (YData)":
-    st.header("🧪 Automatic CSV Data Profiler")
-    profiling_file = st.file_uploader("Upload a CSV file to profile", type="csv", key="profile")
-
-    if profiling_file:
-        df = pd.read_csv(profiling_file)
-        st.subheader("📊 Profile Report")
-        profile = ProfileReport(df, title="CSV Data Report", explorative=True)
-        st_profile_report(profile)
-
-        # Save to a temporary HTML file
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp_file:
-            profile.to_file(tmp_file.name)
-            tmp_file.seek(0)
-            st.download_button(
-                label="📥 Download HTML Report",
-                data=tmp_file.read(),
-                file_name="data_profile_report.html",
-                mime="text/html"
-            )
 
 # === Admin Tools ===
 with st.expander("⚙️ Admin Tools"):

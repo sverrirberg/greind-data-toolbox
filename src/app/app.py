@@ -12,6 +12,7 @@ import subprocess
 import matplotlib.pyplot as plt
 import seaborn as sns
 from PIL import Image
+import base64
 
 st.set_page_config(
     page_title="Greind Data Toolbox",
@@ -135,6 +136,10 @@ def create_html_report(df, quality_score, missing_values, file_info, filename):
     now = datetime.datetime.now()
     date_time = now.strftime("%Y-%m-%d %H:%M:%S")
     
+    # Convert logo to base64
+    with open("src/app/assets/Logo_Greind_Horizontal.png", "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read()).decode()
+    
     # Create HTML content
     html_content = f"""
     <!DOCTYPE html>
@@ -144,12 +149,17 @@ def create_html_report(df, quality_score, missing_values, file_info, filename):
             body {{
                 font-family: Arial, sans-serif;
                 margin: 40px;
+                background-color: #f8f9fa;
             }}
             .header {{
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 margin-bottom: 20px;
+                padding: 20px;
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             }}
             .logo {{
                 height: 50px;
@@ -157,34 +167,48 @@ def create_html_report(df, quality_score, missing_values, file_info, filename):
             .title {{
                 text-align: center;
                 color: #333;
+                margin: 0;
             }}
             .info {{
                 text-align: center;
                 color: #666;
                 margin-bottom: 20px;
+                padding: 15px;
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             }}
             .score {{
                 font-size: 48px;
                 color: blue;
                 text-align: center;
                 margin: 20px 0;
+                padding: 20px;
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             }}
             h2 {{
                 color: #444;
                 margin-top: 30px;
+                padding-left: 10px;
             }}
             table {{
                 width: 100%;
                 border-collapse: collapse;
                 margin: 20px 0;
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             }}
             th, td {{
                 border: 1px solid #ddd;
-                padding: 8px;
+                padding: 12px;
                 text-align: left;
             }}
             th {{
                 background-color: #f2f2f2;
+                font-weight: bold;
             }}
             tr:nth-child(even) {{
                 background-color: #f9f9f9;
@@ -211,7 +235,7 @@ def create_html_report(df, quality_score, missing_values, file_info, filename):
     </head>
     <body>
         <div class="header">
-            <img src="src/app/assets/Logo_Greind_Horizontal.png" alt="Greind Logo" class="logo">
+            <img src="data:image/png;base64,{encoded_string}" alt="Greind Logo" class="logo">
             <h1 class="title">Data Quality Report</h1>
             <div></div>
         </div>

@@ -157,6 +157,51 @@ if mode == "🧪 CSV Profiling (YData)":
         }, index=df.columns)
         st.table(columns_df)
         
+        # Missing values download section
+        st.subheader("📥 Download Missing Values")
+        st.write("Select columns to include in the missing values report:")
+        
+        # Create checkboxes for each column
+        selected_columns = []
+        col1, col2, col3 = st.columns(3)
+        columns_per_col = (len(df.columns) + 2) // 3  # Divide columns into 3 columns
+        
+        for i, col in enumerate(df.columns):
+            if i < columns_per_col:
+                with col1:
+                    if st.checkbox(col, key=f"col_{i}"):
+                        selected_columns.append(col)
+            elif i < columns_per_col * 2:
+                with col2:
+                    if st.checkbox(col, key=f"col_{i}"):
+                        selected_columns.append(col)
+            else:
+                with col3:
+                    if st.checkbox(col, key=f"col_{i}"):
+                        selected_columns.append(col)
+        
+        if selected_columns:
+            # Create DataFrame with only rows that have missing values in selected columns
+            missing_df = df[df[selected_columns].isnull().any(axis=1)][selected_columns]
+            
+            if not missing_df.empty:
+                # Add a column showing which columns are missing for each row
+                missing_df['Missing In'] = missing_df.apply(
+                    lambda row: ', '.join([col for col in selected_columns if pd.isnull(row[col])]),
+                    axis=1
+                )
+                
+                # Download button
+                csv = missing_df.to_csv(index=False)
+                st.download_button(
+                    label="📥 Download Missing Values Report",
+                    data=csv,
+                    file_name="missing_values_report.csv",
+                    mime="text/csv"
+                )
+            else:
+                st.info("No missing values found in selected columns.")
+        
         # Show data preview
         st.subheader("📋 Data Preview")
         st.dataframe(df)

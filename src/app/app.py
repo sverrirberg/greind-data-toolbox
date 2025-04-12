@@ -23,6 +23,60 @@ from PIL import Image
 logo_path = "src/app/assets/Logo_Greind_Horizontal.png"
 logo = Image.open(logo_path)
 
+# Custom CSS
+st.markdown("""
+<style>
+    .main {
+        padding: 2rem;
+    }
+    .stButton>button {
+        width: 100%;
+        height: 3em;
+        font-size: 1.2em;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+    .stButton>button:hover {
+        background-color: #45a049;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .stDataFrame {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .stTable {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .section {
+        padding: 1.5rem;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        margin-bottom: 1.5rem;
+    }
+    .info-text {
+        color: #666;
+        font-size: 0.9em;
+        margin-top: 0.5rem;
+    }
+    .quality-score {
+        font-size: 2.5em;
+        font-weight: bold;
+        margin: 0;
+        padding: 0;
+    }
+    .quality-label {
+        color: #666;
+        font-size: 1.1em;
+        margin-top: 0.5rem;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Show the logo in the sidebar
 with st.sidebar:
     st.markdown("""
@@ -87,20 +141,28 @@ mode = st.sidebar.radio("Choose a Tool:", ["🧪 CSV Profiling (YData)", "🔍 U
 
 # === YData Profiling ===
 if mode == "🧪 CSV Profiling (YData)":
-    st.markdown("<h1 style='text-align: center;'>🧪 CSV Data Profiler</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; margin-bottom: 2rem;'>🧪 CSV Data Profiler</h1>", unsafe_allow_html=True)
     
     # Information text
-    st.markdown("""
-    ### 📝 Important Information
-    - The CSV file should be in UTF-8 encoding
-    - The first row should contain column headers
-    - Date columns should be in a standard format (YYYY-MM-DD or similar)
-    - Numeric columns should use dot (.) as decimal separator
-    - Empty cells will be treated as missing values
-    """)
+    with st.container():
+        st.markdown("""
+        <div class="section">
+            <h3>📝 Important Information</h3>
+            <ul>
+                <li>The CSV file should be in UTF-8 encoding</li>
+                <li>The first row should contain column headers</li>
+                <li>Date columns should be in a standard format (YYYY-MM-DD or similar)</li>
+                <li>Numeric columns should use dot (.) as decimal separator</li>
+                <li>Empty cells will be treated as missing values</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Upload section
-    profiling_file = st.file_uploader("Upload CSV file", type="csv", key="profile")
+    with st.container():
+        st.markdown("<div class='section'>", unsafe_allow_html=True)
+        profiling_file = st.file_uploader("Upload CSV file", type="csv", key="profile")
+        st.markdown("</div>", unsafe_allow_html=True)
     
     if profiling_file:
         df = pd.read_csv(profiling_file)
@@ -112,114 +174,134 @@ if mode == "🧪 CSV Profiling (YData)":
         missing_percentage = (missing_values / (total_rows * total_cols)) * 100
         
         # Calculate data quality score (0-100)
-        quality_score = 100 - (missing_percentage * 2)  # Simple scoring based on missing values
+        quality_score = 100 - (missing_percentage * 2)
         
         # Show data quality score
-        st.subheader("📊 Data Quality Score")
-        col1, col2 = st.columns(2)
-        with col1:
-            st.markdown(f"""
-            <div style='text-align: center;'>
-                <h2 style='color: {'#4CAF50' if quality_score >= 80 else '#FFC107' if quality_score >= 60 else '#F44336'};'>
-                    {quality_score:.1f}%
-                </h2>
-                <p>Overall Data Quality</p>
-            </div>
-            """, unsafe_allow_html=True)
-        with col2:
-            st.markdown("""
-            ### Quality Indicators
-            - 🟢 Excellent (80-100%)
-            - 🟡 Good (60-79%)
-            - 🔴 Needs Attention (0-59%)
-            """)
+        with st.container():
+            st.markdown("<div class='section'>", unsafe_allow_html=True)
+            st.subheader("📊 Data Quality Score")
+            col1, col2 = st.columns(2)
+            with col1:
+                st.markdown(f"""
+                <div style='text-align: center;'>
+                    <p class='quality-score' style='color: {'#4CAF50' if quality_score >= 80 else '#FFC107' if quality_score >= 60 else '#F44336'};'>
+                        {quality_score:.1f}%
+                    </p>
+                    <p class='quality-label'>Overall Data Quality</p>
+                </div>
+                """, unsafe_allow_html=True)
+            with col2:
+                st.markdown("""
+                <h4>Quality Indicators</h4>
+                <ul>
+                    <li>🟢 Excellent (80-100%)</li>
+                    <li>🟡 Good (60-79%)</li>
+                    <li>🔴 Needs Attention (0-59%)</li>
+                </ul>
+                """, unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
         
         # Show file information in a table
-        st.subheader("📊 File Information")
-        file_info = pd.DataFrame({
-            'Metric': ['Number of rows', 'Number of columns', 'Total missing values', 'Missing value percentage'],
-            'Value': [len(df), len(df.columns), missing_values, f"{missing_percentage:.2f}%"]
-        }).set_index('Metric')
-        st.table(file_info)
+        with st.container():
+            st.markdown("<div class='section'>", unsafe_allow_html=True)
+            st.subheader("📊 File Information")
+            st.markdown("<p class='info-text'>Basic information about your dataset</p>", unsafe_allow_html=True)
+            file_info = pd.DataFrame({
+                'Metric': ['Number of rows', 'Number of columns', 'Total missing values', 'Missing value percentage'],
+                'Value': [len(df), len(df.columns), missing_values, f"{missing_percentage:.2f}%"]
+            }).set_index('Metric')
+            st.table(file_info)
+            st.markdown("</div>", unsafe_allow_html=True)
         
         # Show column names in a table
-        st.subheader("📋 Column Names")
-        columns_df = pd.DataFrame({
-            'Data Type': df.dtypes.astype(str),
-            'Missing Values': df.isnull().sum(),
-            'Missing %': (df.isnull().sum() / len(df) * 100).round(2).astype(str) + '%',
-            'Quality Alert': [
-                '🟢' if (df[col].isnull().sum() / len(df) * 100) < 5
-                else '🟡' if (df[col].isnull().sum() / len(df) * 100) < 20
-                else '🔴'
-                for col in df.columns
-            ]
-        }, index=df.columns)
-        st.table(columns_df)
+        with st.container():
+            st.markdown("<div class='section'>", unsafe_allow_html=True)
+            st.subheader("📋 Column Names")
+            st.markdown("<p class='info-text'>Detailed information about each column</p>", unsafe_allow_html=True)
+            columns_df = pd.DataFrame({
+                'Data Type': df.dtypes.astype(str),
+                'Missing Values': df.isnull().sum(),
+                'Missing %': (df.isnull().sum() / len(df) * 100).round(2).astype(str) + '%',
+                'Quality Alert': [
+                    '🟢' if (df[col].isnull().sum() / len(df) * 100) < 5
+                    else '🟡' if (df[col].isnull().sum() / len(df) * 100) < 20
+                    else '🔴'
+                    for col in df.columns
+                ]
+            }, index=df.columns)
+            st.table(columns_df)
+            st.markdown("</div>", unsafe_allow_html=True)
         
         # Missing values download section
-        st.subheader("📥 Download Missing Values")
-        st.write("Select columns to include in the missing values report:")
-        
-        # Create checkboxes for each column
-        selected_columns = []
-        col1, col2, col3 = st.columns(3)
-        columns_per_col = (len(df.columns) + 2) // 3  # Divide columns into 3 columns
-        
-        for i, col in enumerate(df.columns):
-            if i < columns_per_col:
-                with col1:
-                    if st.checkbox(col, key=f"col_{i}"):
-                        selected_columns.append(col)
-            elif i < columns_per_col * 2:
-                with col2:
-                    if st.checkbox(col, key=f"col_{i}"):
-                        selected_columns.append(col)
-            else:
-                with col3:
-                    if st.checkbox(col, key=f"col_{i}"):
-                        selected_columns.append(col)
-        
-        if selected_columns:
-            # Create DataFrame with only rows that have missing values in selected columns
-            missing_df = df[df[selected_columns].isnull().any(axis=1)][selected_columns]
+        with st.container():
+            st.markdown("<div class='section'>", unsafe_allow_html=True)
+            st.subheader("📥 Download Missing Values")
+            st.markdown("<p class='info-text'>Select columns to include in the missing values report</p>", unsafe_allow_html=True)
             
-            if not missing_df.empty:
-                # Add a column showing which columns are missing for each row
-                missing_df['Missing In'] = missing_df.apply(
-                    lambda row: ', '.join([col for col in selected_columns if pd.isnull(row[col])]),
-                    axis=1
-                )
+            # Create checkboxes for each column
+            selected_columns = []
+            col1, col2, col3 = st.columns(3)
+            columns_per_col = (len(df.columns) + 2) // 3
+            
+            for i, col in enumerate(df.columns):
+                if i < columns_per_col:
+                    with col1:
+                        if st.checkbox(col, key=f"col_{i}"):
+                            selected_columns.append(col)
+                elif i < columns_per_col * 2:
+                    with col2:
+                        if st.checkbox(col, key=f"col_{i}"):
+                            selected_columns.append(col)
+                else:
+                    with col3:
+                        if st.checkbox(col, key=f"col_{i}"):
+                            selected_columns.append(col)
+            
+            if selected_columns:
+                missing_df = df[df[selected_columns].isnull().any(axis=1)][selected_columns]
                 
-                # Download button
-                csv = missing_df.to_csv(index=False)
-                st.download_button(
-                    label="📥 Download Missing Values Report",
-                    data=csv,
-                    file_name="missing_values_report.csv",
-                    mime="text/csv"
-                )
-            else:
-                st.info("No missing values found in selected columns.")
+                if not missing_df.empty:
+                    missing_df['Missing In'] = missing_df.apply(
+                        lambda row: ', '.join([col for col in selected_columns if pd.isnull(row[col])]),
+                        axis=1
+                    )
+                    
+                    csv = missing_df.to_csv(index=False)
+                    st.download_button(
+                        label="📥 Download Missing Values Report",
+                        data=csv,
+                        file_name="missing_values_report.csv",
+                        mime="text/csv"
+                    )
+                else:
+                    st.info("No missing values found in selected columns.")
+            st.markdown("</div>", unsafe_allow_html=True)
         
         # Show data preview
-        st.subheader("📋 Data Preview")
-        st.dataframe(df)
+        with st.container():
+            st.markdown("<div class='section'>", unsafe_allow_html=True)
+            st.subheader("📋 Data Preview")
+            st.markdown("<p class='info-text'>First few rows of your dataset</p>", unsafe_allow_html=True)
+            st.dataframe(df)
+            st.markdown("</div>", unsafe_allow_html=True)
         
         # Configuration options
-        st.subheader("⚙️ Configuration")
-        col1, col2 = st.columns(2)
-        with col1:
-            show_correlation = st.checkbox("Show correlations", value=True)
-            show_missing = st.checkbox("Show missing values", value=True)
-        with col2:
-            show_duplicates = st.checkbox("Show duplicates", value=True)
-            show_samples = st.checkbox("Show samples", value=True)
+        with st.container():
+            st.markdown("<div class='section'>", unsafe_allow_html=True)
+            st.subheader("⚙️ Configuration")
+            st.markdown("<p class='info-text'>Customize your analysis</p>", unsafe_allow_html=True)
+            col1, col2 = st.columns(2)
+            with col1:
+                show_correlation = st.checkbox("Show correlations", value=True)
+                show_missing = st.checkbox("Show missing values", value=True)
+            with col2:
+                show_duplicates = st.checkbox("Show duplicates", value=True)
+                show_samples = st.checkbox("Show samples", value=True)
+            st.markdown("</div>", unsafe_allow_html=True)
         
         # Generate report button
-        if st.button("📊 PROFILE CSV", key="profile_button"):
-            with st.spinner("Generating report..."):
-                # Generate and show report
+        if st.button("📊 Detailed Analysis", key="profile_button"):
+            with st.spinner("Generating detailed analysis..."):
                 profile = ProfileReport(
                     df,
                     title="CSV Data Report",
@@ -231,7 +313,6 @@ if mode == "🧪 CSV Profiling (YData)":
                 )
                 st_profile_report(profile)
 
-                # Download button
                 with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp_file:
                     profile.to_file(tmp_file.name)
                     tmp_file.seek(0)

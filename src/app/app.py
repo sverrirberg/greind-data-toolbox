@@ -22,7 +22,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 from dotenv import load_dotenv
-import pdfkit
+from weasyprint import HTML
 
 # Load environment variables
 load_dotenv()
@@ -479,14 +479,43 @@ def create_pdf_report(df, quality_score, missing_values, file_info):
     <html>
     <head>
         <style>
-            body {{ font-family: Arial, sans-serif; margin: 40px; }}
-            h1 {{ text-align: center; color: #333; }}
-            .score {{ font-size: 48px; color: blue; text-align: center; margin: 20px 0; }}
-            h2 {{ color: #444; margin-top: 30px; }}
-            table {{ width: 100%; border-collapse: collapse; margin: 20px 0; }}
-            th, td {{ border: 1px solid #ddd; padding: 8px; text-align: left; }}
-            th {{ background-color: #f2f2f2; }}
-            tr:nth-child(even) {{ background-color: #f9f9f9; }}
+            @page {{
+                margin: 1cm;
+            }}
+            body {{
+                font-family: Arial, sans-serif;
+                margin: 40px;
+            }}
+            h1 {{
+                text-align: center;
+                color: #333;
+            }}
+            .score {{
+                font-size: 48px;
+                color: blue;
+                text-align: center;
+                margin: 20px 0;
+            }}
+            h2 {{
+                color: #444;
+                margin-top: 30px;
+            }}
+            table {{
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }}
+            th, td {{
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }}
+            th {{
+                background-color: #f2f2f2;
+            }}
+            tr:nth-child(even) {{
+                background-color: #f9f9f9;
+            }}
         </style>
     </head>
     <body>
@@ -539,17 +568,7 @@ def create_pdf_report(df, quality_score, missing_values, file_info):
     """
     
     # Convert HTML to PDF
-    options = {
-        'page-size': 'Letter',
-        'margin-top': '0.75in',
-        'margin-right': '0.75in',
-        'margin-bottom': '0.75in',
-        'margin-left': '0.75in',
-        'encoding': "UTF-8",
-        'no-outline': None
-    }
-    
-    pdfkit.from_string(html_content, "data_quality_report.pdf", options=options)
+    HTML(string=html_content).write_pdf("data_quality_report.pdf")
     return "data_quality_report.pdf"
 
 def send_email(receiver_email, subject, body, attachment_path=None):

@@ -121,46 +121,74 @@ elif mode == "🔍 UNSPSC LLM Training":
     if uploaded_file:
         df = pd.read_csv(uploaded_file)
         if "description" not in df.columns:
-            st.error("CSV must contain a 'description' column.")
+            st.error("❌ CSV file must contain a 'description' column")
         else:
-            st.info(f"⏳ Predicting {len(df)} items...")
-            results = []
-            for desc in df["description"]:
-                code, desc_text, conf = predict(str(desc))
-                results.append({
-                    "input_description": desc,
-                    "predicted_code": code,
-                    "predicted_description": desc_text,
-                    "confidence": f"{conf:.2%}",
-                    "correct_code": ""
-                })
+            # Show sample of the data
+            st.subheader("📋 Sample of your data")
+            st.dataframe(df.head())
 
-            result_df = pd.DataFrame(results)
-            st.success("✅ Predictions complete!")
-            st.dataframe(result_df, use_container_width=True)
+            # Process button
+            if st.button("Process Data"):
+                with st.spinner("Processing..."):
+                    # Load models
+                    model, encoder = load_model()
+                    bert = load_bert()
+                    unspsc_map = load_unspsc_mapping()
 
-            csv = result_df.to_csv(index=False).encode("utf-8")
-            st.download_button("📥 Download Predictions", csv, "predictions.csv", "text/csv")
+                    # Make predictions
+                    predictions = []
+                    for desc in df["description"]:
+                        pred_code = predict(desc)
+                        predictions.append(pred_code)
 
-    st.subheader("Or enter a single description below")
-    input_text = st.text_area("Procurement Description:")
-    if input_text:
-        code, desc, conf = predict(input_text)
-        st.write(f"**Predicted Code:** `{code}`")
-        st.write(f"**Description:** {desc}")
-        st.write(f"**Confidence:** {conf:.2%}")
+                    # Add predictions to dataframe
+                    df["predicted_unspsc"] = predictions
+                    df["predicted_unspsc_description"] = df["predicted_unspsc"].map(unspsc_map)
 
-        feedback = st.text_input("If incorrect, enter the correct code:")
-        if feedback:
-            log_feedback(input_text, code, feedback)
-            st.success("📩 Feedback saved. Thank you!")
+                    # Show results
+                    st.subheader("🎯 Prediction Results")
+                    st.dataframe(df)
 
-# === Admin Tools ===
-with st.expander("⚙️ Admin Tools"):
-    if st.button("🔄 Retrain Model"):
-        with st.spinner("Retraining model..."):
-            result = subprocess.run(["python", "retrain_model.py"], capture_output=True, text=True)
-            if result.returncode == 0:
-                st.success("✅ Model retrained successfully!")
+                    # Download button
+                    csv = df.to_csv(index=False)
+                    st.download_button(
+                        label="📥 Download Results",
+                        data=csv,
+                        file_name="predicted_unspsc.csv",
+                        mime="text/csv"
+                    )
+
+                    # Feedback section
+                    st.subheader("💬 Feedback")
+                    st.write("Help improve the model by providing feedback on predictions:")
+                    feedback_desc = st.text_area("Description")
+                    feedback_pred = st.text_input("Predicted UNSPSC Code")
+                    feedback_correct = st.text_input("Correct UNSPSC Code (if different)")
+
+                    if st.button("Submit Feedback"):
+                        if feedback_desc and feedback_pred:
+                            log_feedback(feedback_desc, feedback_pred, feedback_correct)
+                            st.success("📩 Feedback saved. Thank you!")
+
+    # Admin Tools
+    with st.expander("⚙️ Admin Tools"):
+        st.subheader("Retrain Model")
+        training_file = st.file_uploader("Upload training data (CSV with 'description' and 'unspsc_code' columns)", type=["csv"], key="train")
+
+        if training_file:
+            train_df = pd.read_csv(training_file)
+            if "description" not in train_df.columns or "unspsc_code" not in train_df.columns:
+                st.error("❌ Training file must contain 'description' and 'unspsc_code' columns")
             else:
-                st.error(f"❌ Retraining failed:\n{result.stderr}")
+                if st.button("Retrain Model"):
+                    with st.spinner("Training new model..."):
+                        # Save uploaded file temporarily
+                        with tempfile.NamedTemporaryFile(delete=False, suffix=".csv") as tmp_file:
+                            train_df.to_csv(tmp_file.name, index=False)
+                        
+                        # Run training script
+                        try:
+                            subprocess.run(["python", "src/models/train_model_6digit.py", tmp_file.name], check=True)
+                            st.success("✅ Model retrained successfully!")
+                        except subprocess.CalledProcessError as e:
+                            st.error(f"❌ Error retraining model: {str(e)}")

@@ -33,14 +33,14 @@ st.markdown("""
         width: 100%;
         height: 3em;
         font-size: 1.2em;
-        background-color: #4CAF50;
+        background-color: #808080;
         color: white;
         border: none;
         border-radius: 5px;
         transition: all 0.3s ease;
     }
     .stButton>button:hover {
-        background-color: #45a049;
+        background-color: #666666;
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
@@ -64,7 +64,7 @@ st.markdown("""
         margin-top: 0.5rem;
     }
     .quality-score {
-        font-size: 2.5em;
+        font-size: 1.5em;
         font-weight: bold;
         margin: 0;
         padding: 0;
@@ -288,7 +288,7 @@ if mode == "🧪 CSV Profiling (YData)":
         # Configuration options
         with st.container():
             st.markdown("<div class='section'>", unsafe_allow_html=True)
-            st.subheader("⚙️ Configuration")
+            st.subheader("⚙️ Detailed Analysis")
             st.markdown("<p class='info-text'>Customize your analysis</p>", unsafe_allow_html=True)
             col1, col2 = st.columns(2)
             with col1:

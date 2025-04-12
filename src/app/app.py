@@ -11,7 +11,7 @@ import tempfile
 import subprocess
 
 st.set_page_config(page_title="Greind Data Toolbox", layout="wide")
-st.title("🛠️ Greind Data Toolbox")
+st.title("")
 
 from PIL import Image
 
@@ -72,7 +72,7 @@ mode = st.sidebar.radio("Choose a Tool:", ["🔍 UNSPSC Prediction", "🧪 CSV P
 
 # === UNSPSC Prediction ===
 if mode == "🔍 UNSPSC Prediction":
-    st.header("🔍 Predict UNSPSC Code")
+    st.header("🔍 UNSPSC LLM Training")
     uploaded_file = st.file_uploader("Upload a CSV with a 'description' column", type=["csv"], key="unspsc")
 
     if uploaded_file:

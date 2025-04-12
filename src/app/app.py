@@ -13,14 +13,14 @@ import subprocess
 st.set_page_config(
     page_title="Greind Data Toolbox",
     layout="wide",
-    page_icon="Logo_Greind_Horizontal.png"
+    page_icon="src/app/assets/favicon-32x32.png"
 )
 st.title("")
 
 from PIL import Image
 
 # Load the logo
-logo_path = "Logo_Greind_Horizontal.png"  # or "assets/Logo_Greind_Horizontal.png"
+logo_path = "src/app/assets/Logo_Greind_Horizontal.png"
 logo = Image.open(logo_path)
 
 # Show the logo in the sidebar

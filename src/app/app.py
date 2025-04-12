@@ -64,15 +64,17 @@ st.markdown("""
         margin-top: 0.5rem;
     }
     .quality-score {
-        font-size: 1.5em;
+        font-size: 3em;
         font-weight: bold;
         margin: 0;
         padding: 0;
+        text-align: center;
     }
     .quality-label {
         color: #666;
         font-size: 1.1em;
         margin-top: 0.5rem;
+        text-align: center;
     }
 </style>
 """, unsafe_allow_html=True)

@@ -90,6 +90,9 @@ st.markdown("""
             font-size: 126px;
         }
     }
+    .quality-indicators {
+        padding-left: 2rem;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -207,12 +210,14 @@ if mode == "🧪 CSV Profiling (YData)":
                 """, unsafe_allow_html=True)
             with col2:
                 st.markdown("""
-                <h4>Quality Indicators</h4>
-                <ul>
-                    <li>🟢 Excellent (80-100%)</li>
-                    <li>🟡 Needs Attention (60-79%)</li>
-                    <li>🔴 Poor (0-59%)</li>
-                </ul>
+                <div class='quality-indicators'>
+                    <h4>Quality Indicators</h4>
+                    <ul>
+                        <li>🟢 Excellent (80-100%)</li>
+                        <li>🟡 Needs Attention (60-79%)</li>
+                        <li>🔴 Poor (0-59%)</li>
+                    </ul>
+                </div>
                 """, unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)
         

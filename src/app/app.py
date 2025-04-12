@@ -72,7 +72,7 @@ def log_feedback(description, predicted_code, correct_code):
         entry.to_csv(log_file, index=False)
 
 # --- Sidebar Menu ---
-mode = st.sidebar.radio("Choose a Tool:", ["🧪 CSV Profiling (YData)", "🔍 UNSPSC LLM Training", "📊 NAICS Project"])
+mode = st.sidebar.radio("Choose a Tool:", ["🧪 CSV Profiling (YData)", "🔍 UNSPSC LLM Training"])
 
 # === YData Profiling ===
 if mode == "🧪 CSV Profiling (YData)":
@@ -196,24 +196,3 @@ elif mode == "🔍 UNSPSC LLM Training":
                             st.success("✅ Model retrained successfully!")
                         except subprocess.CalledProcessError as e:
                             st.error(f"❌ Error retraining model: {str(e)}")
-
-# === NAICS Project ===
-elif mode == "📊 NAICS Project":
-    st.header("📊 NAICS Project")
-    
-    # File uploader
-    uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
-    
-    if uploaded_file is not None:
-        # Read the CSV file
-        df = pd.read_csv(uploaded_file)
-        
-        # Show the data
-        st.subheader("📋 Data Preview")
-        st.dataframe(df)
-        
-        # Add your NAICS Project functionality here
-        # For example:
-        # - Data processing
-        # - Model predictions
-        # - Results visualization

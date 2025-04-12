@@ -105,11 +105,40 @@ if mode == "🧪 CSV Profiling (YData)":
     if profiling_file:
         df = pd.read_csv(profiling_file)
         
+        # Calculate data quality metrics
+        total_rows = len(df)
+        total_cols = len(df.columns)
+        missing_values = df.isnull().sum().sum()
+        missing_percentage = (missing_values / (total_rows * total_cols)) * 100
+        
+        # Calculate data quality score (0-100)
+        quality_score = 100 - (missing_percentage * 2)  # Simple scoring based on missing values
+        
+        # Show data quality score
+        st.subheader("📊 Data Quality Score")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown(f"""
+            <div style='text-align: center;'>
+                <h2 style='color: {'#4CAF50' if quality_score >= 80 else '#FFC107' if quality_score >= 60 else '#F44336'};'>
+                    {quality_score:.1f}%
+                </h2>
+                <p>Overall Data Quality</p>
+            </div>
+            """, unsafe_allow_html=True)
+        with col2:
+            st.markdown("""
+            ### Quality Indicators
+            - 🟢 Excellent (80-100%)
+            - 🟡 Good (60-79%)
+            - 🔴 Needs Attention (0-59%)
+            """)
+        
         # Show file information in a table
         st.subheader("📊 File Information")
         file_info = pd.DataFrame({
-            'Metric': ['Number of rows', 'Number of columns'],
-            'Value': [len(df), len(df.columns)]
+            'Metric': ['Number of rows', 'Number of columns', 'Total missing values', 'Missing value percentage'],
+            'Value': [len(df), len(df.columns), missing_values, f"{missing_percentage:.2f}%"]
         }).set_index('Metric')
         st.table(file_info)
         
@@ -117,7 +146,14 @@ if mode == "🧪 CSV Profiling (YData)":
         st.subheader("📋 Column Names")
         columns_df = pd.DataFrame({
             'Data Type': df.dtypes.astype(str),
-            'Missing Values': df.isnull().sum()
+            'Missing Values': df.isnull().sum(),
+            'Missing %': (df.isnull().sum() / len(df) * 100).round(2).astype(str) + '%',
+            'Quality Alert': [
+                '🟢' if (df[col].isnull().sum() / len(df) * 100) < 5
+                else '🟡' if (df[col].isnull().sum() / len(df) * 100) < 20
+                else '🔴'
+                for col in df.columns
+            ]
         }, index=df.columns)
         st.table(columns_df)
         

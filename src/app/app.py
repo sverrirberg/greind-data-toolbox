@@ -25,7 +25,18 @@ logo = Image.open(logo_path)
 
 # Show the logo in the sidebar
 with st.sidebar:
-    st.image(logo, width=282)  # Set width to 282 pixels
+    st.markdown("""
+    <style>
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    </style>
+    <div class="logo-container">
+    """, unsafe_allow_html=True)
+    st.image(logo, use_column_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
     st.markdown("**Version:** 1.0.5", unsafe_allow_html=True)
 
 # --- Caching ---

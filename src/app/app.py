@@ -619,21 +619,26 @@ if profiling_file:
             
             with filter_col1:
                 # Date range filter
-                if 'date' in df.columns or any('date' in col.lower() for col in df.columns):
+                date_columns = [col for col in df.columns if 'date' in col.lower() or 'date' in col]
+                if date_columns:
                     date_col = st.selectbox(
                         "Select date column for filtering",
-                        [col for col in df.columns if 'date' in col.lower() or 'date' in col],
+                        date_columns,
                         index=0
                     )
                     if date_col:
-                        min_date = pd.to_datetime(df[date_col].min())
-                        max_date = pd.to_datetime(df[date_col].max())
-                        date_range = st.date_input(
-                            "Select date range",
-                            value=(min_date, max_date),
-                            min_value=min_date,
-                            max_value=max_date
-                        )
+                        try:
+                            df[date_col] = pd.to_datetime(df[date_col])
+                            min_date = df[date_col].min()
+                            max_date = df[date_col].max()
+                            date_range = st.date_input(
+                                "Select date range",
+                                value=(min_date, max_date),
+                                min_value=min_date,
+                                max_value=max_date
+                            )
+                        except:
+                            st.warning(f"Could not parse dates in column '{date_col}'. Please ensure dates are in a valid format.")
             
             with filter_col2:
                 # Missing value threshold filter
@@ -674,26 +679,30 @@ if profiling_file:
                 if i < columns_per_col:
                     with col1:
                         st.markdown(checkbox_style, unsafe_allow_html=True)
-                        if st.checkbox(f"{col} ({missing_pct:.1f}% missing)", key=f"col_{i}"):
+                        if st.checkbox(f"{col} ({missing_pct:.1f}%)", key=f"col_{i}"):
                             selected_columns.append(col)
                 elif i < columns_per_col * 2:
                     with col2:
                         st.markdown(checkbox_style, unsafe_allow_html=True)
-                        if st.checkbox(f"{col} ({missing_pct:.1f}% missing)", key=f"col_{i}"):
+                        if st.checkbox(f"{col} ({missing_pct:.1f}%)", key=f"col_{i}"):
                             selected_columns.append(col)
                 else:
                     with col3:
                         st.markdown(checkbox_style, unsafe_allow_html=True)
-                        if st.checkbox(f"{col} ({missing_pct:.1f}% missing)", key=f"col_{i}"):
+                        if st.checkbox(f"{col} ({missing_pct:.1f}%)", key=f"col_{i}"):
                             selected_columns.append(col)
             
             if selected_columns:
                 # Apply date filter if selected
-                if 'date_range' in locals() and date_range and len(date_range) == 2:
-                    start_date, end_date = date_range
-                    mask = (pd.to_datetime(df[date_col]) >= pd.to_datetime(start_date)) & \
-                           (pd.to_datetime(df[date_col]) <= pd.to_datetime(end_date))
-                    filtered_df = df[mask]
+                if 'date_range' in locals() and date_range and len(date_range) == 2 and date_col:
+                    try:
+                        start_date, end_date = date_range
+                        mask = (df[date_col] >= pd.to_datetime(start_date)) & \
+                               (df[date_col] <= pd.to_datetime(end_date))
+                        filtered_df = df[mask]
+                    except:
+                        filtered_df = df
+                        st.warning("Could not apply date filter. Showing all data.")
                 else:
                     filtered_df = df
                 
@@ -718,7 +727,7 @@ if profiling_file:
                     
                     # Add missing percentages to the report
                     for col in selected_columns:
-                        missing_df[f'{col} Missing %'] = missing_percentages[col]
+                        missing_df[f'{col} %'] = missing_percentages[col]
                     
                     csv = missing_df.to_csv(index=False)
                     st.download_button(

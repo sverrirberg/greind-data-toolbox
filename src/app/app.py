@@ -663,14 +663,19 @@ if profiling_file:
             }
             
             for i, col in enumerate(df.columns):
-                # Determine color based on missing percentage
+                # Determine color and symbol based on missing percentage
                 missing_pct = missing_percentages[col]
-                color = '#4CAF50' if missing_pct < 5 else '#FFC107' if missing_pct < 20 else '#F44336'
+                if missing_pct < 5:
+                    symbol = "🟢"  # Green for low missing values
+                elif missing_pct < 20:
+                    symbol = "🟡"  # Yellow for medium missing values
+                else:
+                    symbol = "🔴"  # Red for high missing values
                 
                 checkbox_style = f"""
                 <style>
                 div[data-testid="stCheckbox"] label[data-testid="stMarkdownContainer"] p {{
-                    color: {color};
+                    color: {'#4CAF50' if missing_pct < 5 else '#FFC107' if missing_pct < 20 else '#F44336'};
                     font-weight: bold;
                 }}
                 </style>
@@ -679,17 +684,17 @@ if profiling_file:
                 if i < columns_per_col:
                     with col1:
                         st.markdown(checkbox_style, unsafe_allow_html=True)
-                        if st.checkbox(f"{col} ({missing_pct:.1f}%)", key=f"col_{i}"):
+                        if st.checkbox(f"{symbol} {col} ({missing_pct:.1f}%)", key=f"col_{i}"):
                             selected_columns.append(col)
                 elif i < columns_per_col * 2:
                     with col2:
                         st.markdown(checkbox_style, unsafe_allow_html=True)
-                        if st.checkbox(f"{col} ({missing_pct:.1f}%)", key=f"col_{i}"):
+                        if st.checkbox(f"{symbol} {col} ({missing_pct:.1f}%)", key=f"col_{i}"):
                             selected_columns.append(col)
                 else:
                     with col3:
                         st.markdown(checkbox_style, unsafe_allow_html=True)
-                        if st.checkbox(f"{col} ({missing_pct:.1f}%)", key=f"col_{i}"):
+                        if st.checkbox(f"{symbol} {col} ({missing_pct:.1f}%)", key=f"col_{i}"):
                             selected_columns.append(col)
             
             if selected_columns:

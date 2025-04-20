@@ -613,33 +613,112 @@ if profiling_file:
             st.subheader("📥 Download Missing Values File")
             st.markdown("<p class='info-text'>Select columns to include in the missing values report</p>", unsafe_allow_html=True)
             
-            # Create checkboxes for each column
+            # Add filtering options
+            st.markdown("### 🔍 Filter Options")
+            filter_col1, filter_col2 = st.columns(2)
+            
+            with filter_col1:
+                # Date range filter
+                if 'date' in df.columns or any('date' in col.lower() for col in df.columns):
+                    date_col = st.selectbox(
+                        "Select date column for filtering",
+                        [col for col in df.columns if 'date' in col.lower() or 'date' in col],
+                        index=0
+                    )
+                    if date_col:
+                        min_date = pd.to_datetime(df[date_col].min())
+                        max_date = pd.to_datetime(df[date_col].max())
+                        date_range = st.date_input(
+                            "Select date range",
+                            value=(min_date, max_date),
+                            min_value=min_date,
+                            max_value=max_date
+                        )
+            
+            with filter_col2:
+                # Missing value threshold filter
+                threshold = st.slider(
+                    "Minimum missing values percentage to include",
+                    min_value=0,
+                    max_value=100,
+                    value=0,
+                    step=1,
+                    format="%d%%"
+                )
+            
+            # Create checkboxes for each column with color coding
             selected_columns = []
             col1, col2, col3 = st.columns(3)
             columns_per_col = (len(df.columns) + 2) // 3
             
+            # Calculate missing percentages for color coding
+            missing_percentages = {
+                col: (df[col].isnull().sum() / len(df) * 100)
+                for col in df.columns
+            }
+            
             for i, col in enumerate(df.columns):
+                # Determine color based on missing percentage
+                missing_pct = missing_percentages[col]
+                color = '#4CAF50' if missing_pct < 5 else '#FFC107' if missing_pct < 20 else '#F44336'
+                
+                checkbox_style = f"""
+                <style>
+                div[data-testid="stCheckbox"] label[data-testid="stMarkdownContainer"] p {{
+                    color: {color};
+                    font-weight: bold;
+                }}
+                </style>
+                """
+                
                 if i < columns_per_col:
                     with col1:
-                        if st.checkbox(col, key=f"col_{i}"):
+                        st.markdown(checkbox_style, unsafe_allow_html=True)
+                        if st.checkbox(f"{col} ({missing_pct:.1f}% missing)", key=f"col_{i}"):
                             selected_columns.append(col)
                 elif i < columns_per_col * 2:
                     with col2:
-                        if st.checkbox(col, key=f"col_{i}"):
+                        st.markdown(checkbox_style, unsafe_allow_html=True)
+                        if st.checkbox(f"{col} ({missing_pct:.1f}% missing)", key=f"col_{i}"):
                             selected_columns.append(col)
                 else:
                     with col3:
-                        if st.checkbox(col, key=f"col_{i}"):
+                        st.markdown(checkbox_style, unsafe_allow_html=True)
+                        if st.checkbox(f"{col} ({missing_pct:.1f}% missing)", key=f"col_{i}"):
                             selected_columns.append(col)
             
             if selected_columns:
-                missing_df = df[df[selected_columns].isnull().any(axis=1)][selected_columns]
+                # Apply date filter if selected
+                if 'date_range' in locals() and date_range and len(date_range) == 2:
+                    start_date, end_date = date_range
+                    mask = (pd.to_datetime(df[date_col]) >= pd.to_datetime(start_date)) & \
+                           (pd.to_datetime(df[date_col]) <= pd.to_datetime(end_date))
+                    filtered_df = df[mask]
+                else:
+                    filtered_df = df
+                
+                # Apply missing value threshold filter
+                missing_df = filtered_df[filtered_df[selected_columns].isnull().any(axis=1)][selected_columns]
+                missing_df = missing_df[
+                    missing_df.apply(
+                        lambda row: any(
+                            missing_percentages[col] >= threshold
+                            for col in selected_columns
+                            if pd.isnull(row[col])
+                        ),
+                        axis=1
+                    )
+                ]
                 
                 if not missing_df.empty:
                     missing_df['Missing In'] = missing_df.apply(
                         lambda row: ', '.join([col for col in selected_columns if pd.isnull(row[col])]),
                         axis=1
                     )
+                    
+                    # Add missing percentages to the report
+                    for col in selected_columns:
+                        missing_df[f'{col} Missing %'] = missing_percentages[col]
                     
                     csv = missing_df.to_csv(index=False)
                     st.download_button(
@@ -649,7 +728,7 @@ if profiling_file:
                         mime="text/csv"
                     )
                 else:
-                    st.info("No missing values found in selected columns.")
+                    st.info("No missing values found matching the selected criteria.")
             st.markdown("</div>", unsafe_allow_html=True)
         
         # Show data preview

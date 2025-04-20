@@ -822,6 +822,9 @@ if profiling_file:
                     axis=1
                 )
                 
+                # Add original line number (adding 2 because Excel starts at 1 and we have a header row)
+                missing_df['Line Number Original'] = missing_df.index + 2
+                
                 # Add download format options
                 st.markdown("### 📥 Download Options")
                 download_format = st.radio(
@@ -830,8 +833,9 @@ if profiling_file:
                     horizontal=True
                 )
                 
-                # Prepare final dataframe for download (only selected columns and Missing In)
-                download_df = missing_df[selected_columns + ['Missing In']]
+                # Prepare final dataframe for download (Line Number Original first, then selected columns and Missing In)
+                columns_order = ['Line Number Original'] + selected_columns + ['Missing In']
+                download_df = missing_df[columns_order]
                 
                 if download_format == "CSV":
                     csv = download_df.to_csv(index=False)

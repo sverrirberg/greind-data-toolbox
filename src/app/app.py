@@ -617,6 +617,15 @@ if profiling_file:
             # Add sorting and filtering options
             st.markdown("### 🔍 Column Selection Options")
             
+            # Calculate missing percentages for all columns
+            missing_percentages = {
+                col: (df[col].isnull().sum() / len(df) * 100)
+                for col in df.columns
+            }
+            
+            # Initialize selected_columns
+            selected_columns = []
+            
             # Add search box
             search_term = st.text_input("🔍 Search columns", "")
             

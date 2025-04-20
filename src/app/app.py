@@ -635,6 +635,15 @@ if profiling_file:
                     'high': False
                 }
 
+            # Add search box
+            search_term = st.text_input("🔍 Search columns", "")
+            
+            # Add sorting options
+            sort_option = st.selectbox(
+                "Sort columns by",
+                ["Name (A-Z)", "Name (Z-A)", "Missing % (Low to High)", "Missing % (High to Low)"]
+            )
+
             def handle_button_click(category):
                 # Toggle the button state
                 st.session_state.button_states[category] = not st.session_state.button_states[category]

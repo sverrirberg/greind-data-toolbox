@@ -11,6 +11,7 @@ import seaborn as sns
 from PIL import Image
 import base64
 from scipy import stats
+import io
 
 st.set_page_config(
     page_title="Greind Data Toolbox",
@@ -613,58 +614,68 @@ if profiling_file:
             st.subheader("📥 Download Missing Values File")
             st.markdown("<p class='info-text'>Select columns to include in the missing values report</p>", unsafe_allow_html=True)
             
-            # Add filtering options
-            st.markdown("### 🔍 Filter Options")
-            filter_col1, filter_col2 = st.columns(2)
+            # Add sorting and filtering options
+            st.markdown("### 🔍 Column Selection Options")
             
-            with filter_col1:
-                # Date range filter
-                date_columns = [col for col in df.columns if 'date' in col.lower() or 'date' in col]
-                if date_columns:
-                    date_col = st.selectbox(
-                        "Select date column for filtering",
-                        date_columns,
-                        index=0
-                    )
-                    if date_col:
-                        try:
-                            df[date_col] = pd.to_datetime(df[date_col])
-                            min_date = df[date_col].min()
-                            max_date = df[date_col].max()
-                            date_range = st.date_input(
-                                "Select date range",
-                                value=(min_date, max_date),
-                                min_value=min_date,
-                                max_value=max_date
-                            )
-                        except:
-                            st.warning(f"Could not parse dates in column '{date_col}'. Please ensure dates are in a valid format.")
+            # Add search box
+            search_term = st.text_input("🔍 Search columns", "")
             
-            with filter_col2:
-                # Missing value threshold filter
-                threshold = st.slider(
-                    "Minimum missing values percentage to include",
-                    min_value=0,
-                    max_value=100,
-                    value=0,
-                    step=1,
-                    format="%d%%"
-                )
+            # Add sorting options
+            sort_option = st.selectbox(
+                "Sort columns by",
+                ["Name (A-Z)", "Name (Z-A)", "Missing % (Low to High)", "Missing % (High to Low)"]
+            )
             
-            # Create checkboxes for each column with color coding
-            selected_columns = []
+            # Add "Select All" buttons
             col1, col2, col3 = st.columns(3)
-            columns_per_col = (len(df.columns) + 2) // 3
+            with col1:
+                if st.button("🟢 Select All Low (<5%)"):
+                    selected_columns = [col for col, pct in missing_percentages.items() if pct < 5]
+            with col2:
+                if st.button("🟡 Select All Medium (5-20%)"):
+                    selected_columns = [col for col, pct in missing_percentages.items() if 5 <= pct < 20]
+            with col3:
+                if st.button("🔴 Select All High (>20%)"):
+                    selected_columns = [col for col, pct in missing_percentages.items() if pct >= 20]
             
-            # Calculate missing percentages for color coding
-            missing_percentages = {
-                col: (df[col].isnull().sum() / len(df) * 100)
-                for col in df.columns
-            }
+            # Sort columns based on selection
+            sorted_columns = list(df.columns)
+            if sort_option == "Name (A-Z)":
+                sorted_columns.sort()
+            elif sort_option == "Name (Z-A)":
+                sorted_columns.sort(reverse=True)
+            elif sort_option == "Missing % (Low to High)":
+                sorted_columns.sort(key=lambda x: missing_percentages[x])
+            else:  # "Missing % (High to Low)"
+                sorted_columns.sort(key=lambda x: missing_percentages[x], reverse=True)
             
-            for i, col in enumerate(df.columns):
-                # Determine color and symbol based on missing percentage
+            # Filter columns based on search term
+            if search_term:
+                sorted_columns = [col for col in sorted_columns if search_term.lower() in col.lower()]
+            
+            # Create checkboxes for each column with color coding and tooltips
+            col1, col2, col3 = st.columns(3)
+            columns_per_col = (len(sorted_columns) + 2) // 3
+            
+            for i, col in enumerate(sorted_columns):
+                # Calculate statistics for tooltip
                 missing_pct = missing_percentages[col]
+                missing_count = df[col].isnull().sum()
+                total_count = len(df)
+                non_missing_count = total_count - missing_count
+                
+                # Create tooltip content
+                tooltip = f"""
+                <div style='font-size: 12px;'>
+                    <b>Total Rows:</b> {total_count}<br>
+                    <b>Missing Values:</b> {missing_count}<br>
+                    <b>Non-Missing Values:</b> {non_missing_count}<br>
+                    <b>Missing Percentage:</b> {missing_pct:.1f}%<br>
+                    <b>Data Type:</b> {df[col].dtype}
+                </div>
+                """
+                
+                # Determine color and symbol based on missing percentage
                 if missing_pct < 5:
                     symbol = "🟢"  # Green for low missing values
                 elif missing_pct < 20:
@@ -684,17 +695,20 @@ if profiling_file:
                 if i < columns_per_col:
                     with col1:
                         st.markdown(checkbox_style, unsafe_allow_html=True)
-                        if st.checkbox(f"{symbol} {col} ({missing_pct:.1f}%)", key=f"col_{i}"):
+                        st.markdown(f'<span title="{tooltip}">{symbol} {col} ({missing_pct:.1f}%)</span>', unsafe_allow_html=True)
+                        if st.checkbox("", key=f"col_{i}"):
                             selected_columns.append(col)
                 elif i < columns_per_col * 2:
                     with col2:
                         st.markdown(checkbox_style, unsafe_allow_html=True)
-                        if st.checkbox(f"{symbol} {col} ({missing_pct:.1f}%)", key=f"col_{i}"):
+                        st.markdown(f'<span title="{tooltip}">{symbol} {col} ({missing_pct:.1f}%)</span>', unsafe_allow_html=True)
+                        if st.checkbox("", key=f"col_{i}"):
                             selected_columns.append(col)
                 else:
                     with col3:
                         st.markdown(checkbox_style, unsafe_allow_html=True)
-                        if st.checkbox(f"{symbol} {col} ({missing_pct:.1f}%)", key=f"col_{i}"):
+                        st.markdown(f'<span title="{tooltip}">{symbol} {col} ({missing_pct:.1f}%)</span>', unsafe_allow_html=True)
+                        if st.checkbox("", key=f"col_{i}"):
                             selected_columns.append(col)
             
             if selected_columns:
@@ -711,38 +725,51 @@ if profiling_file:
                 else:
                     filtered_df = df
                 
-                # Apply missing value threshold filter
                 missing_df = filtered_df[filtered_df[selected_columns].isnull().any(axis=1)][selected_columns]
-                missing_df = missing_df[
-                    missing_df.apply(
-                        lambda row: any(
-                            missing_percentages[col] >= threshold
-                            for col in selected_columns
-                            if pd.isnull(row[col])
-                        ),
-                        axis=1
-                    )
-                ]
+                missing_df['Missing In'] = missing_df.apply(
+                    lambda row: ', '.join([col for col in selected_columns if pd.isnull(row[col])]),
+                    axis=1
+                )
                 
-                if not missing_df.empty:
-                    missing_df['Missing In'] = missing_df.apply(
-                        lambda row: ', '.join([col for col in selected_columns if pd.isnull(row[col])]),
-                        axis=1
-                    )
-                    
-                    # Add missing percentages to the report
-                    for col in selected_columns:
-                        missing_df[f'{col} %'] = missing_percentages[col]
-                    
+                # Add missing percentages to the report
+                for col in selected_columns:
+                    missing_df[f'{col} %'] = missing_percentages[col]
+                
+                # Add download format options
+                st.markdown("### 📥 Download Options")
+                download_format = st.radio(
+                    "Select download format",
+                    ["CSV", "Excel", "JSON"],
+                    horizontal=True
+                )
+                
+                if download_format == "CSV":
                     csv = missing_df.to_csv(index=False)
                     st.download_button(
-                        label="📥 Download Missing Values Report",
+                        label="📥 Download CSV",
                         data=csv,
                         file_name="missing_values_report.csv",
                         mime="text/csv"
                     )
-                else:
-                    st.info("No missing values found matching the selected criteria.")
+                elif download_format == "Excel":
+                    excel_buffer = io.BytesIO()
+                    with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
+                        missing_df.to_excel(writer, index=False, sheet_name='Missing Values')
+                    excel_data = excel_buffer.getvalue()
+                    st.download_button(
+                        label="📥 Download Excel",
+                        data=excel_data,
+                        file_name="missing_values_report.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
+                else:  # JSON
+                    json_data = missing_df.to_json(orient='records', indent=2)
+                    st.download_button(
+                        label="📥 Download JSON",
+                        data=json_data,
+                        file_name="missing_values_report.json",
+                        mime="application/json"
+                    )
             st.markdown("</div>", unsafe_allow_html=True)
         
         # Show data preview

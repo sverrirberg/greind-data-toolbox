@@ -813,15 +813,14 @@ if profiling_file:
                 else:
                     filtered_df = df
                 
+                # Get rows with missing values in selected columns
                 missing_df = filtered_df[filtered_df[selected_columns].isnull().any(axis=1)][selected_columns]
+                
+                # Add Missing In column
                 missing_df['Missing In'] = missing_df.apply(
                     lambda row: ', '.join([col for col in selected_columns if pd.isnull(row[col])]),
                     axis=1
                 )
-                
-                # Add missing percentages to the report
-                for col in selected_columns:
-                    missing_df[f'{col} %'] = missing_percentages[col]
                 
                 # Add download format options
                 st.markdown("### 📥 Download Options")
@@ -831,8 +830,11 @@ if profiling_file:
                     horizontal=True
                 )
                 
+                # Prepare final dataframe for download (only selected columns and Missing In)
+                download_df = missing_df[selected_columns + ['Missing In']]
+                
                 if download_format == "CSV":
-                    csv = missing_df.to_csv(index=False)
+                    csv = download_df.to_csv(index=False)
                     st.download_button(
                         label="📥 Download CSV",
                         data=csv,
@@ -842,7 +844,7 @@ if profiling_file:
                 elif download_format == "Excel":
                     excel_buffer = io.BytesIO()
                     with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
-                        missing_df.to_excel(writer, index=False, sheet_name='Missing Values')
+                        download_df.to_excel(writer, index=False, sheet_name='Missing Values')
                     excel_data = excel_buffer.getvalue()
                     st.download_button(
                         label="📥 Download Excel",
@@ -851,7 +853,7 @@ if profiling_file:
                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     )
                 else:  # JSON
-                    json_data = missing_df.to_json(orient='records', indent=2)
+                    json_data = download_df.to_json(orient='records', indent=2)
                     st.download_button(
                         label="📥 Download JSON",
                         data=json_data,

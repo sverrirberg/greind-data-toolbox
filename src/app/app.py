@@ -614,11 +614,15 @@ if profiling_file:
             st.subheader("📥 Download Missing Values File")
             st.markdown("<p class='info-text'>Select columns to include in the missing values report</p>", unsafe_allow_html=True)
             
-            # Add sorting options
-            sort_option = st.selectbox(
-                "Sort columns by",
-                ["Name (A-Z)", "Name (Z-A)", "Missing % (Low to High)", "Missing % (High to Low)"]
-            )
+            # Initialize session state for selected columns if not exists
+            if 'selected_columns' not in st.session_state:
+                st.session_state.selected_columns = []
+
+            # Calculate missing percentages for all columns
+            missing_percentages = {
+                col: (df[col].isnull().sum() / len(df) * 100)
+                for col in df.columns
+            }
 
             # Initialize session state for button states if not exists
             if 'button_states' not in st.session_state:
@@ -627,6 +631,12 @@ if profiling_file:
                     'medium': False,
                     'high': False
                 }
+
+            # Add sorting options
+            sort_option = st.selectbox(
+                "Sort columns by",
+                ["Name (A-Z)", "Name (Z-A)", "Missing % (Low to High)", "Missing % (High to Low)"]
+            )
 
             def handle_button_click(category):
                 # Toggle the button state

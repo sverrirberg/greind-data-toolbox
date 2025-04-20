@@ -643,20 +643,70 @@ if profiling_file:
                 padding: 0.5rem 1rem;
                 font-size: 0.8em;
             }
+            .checkbox-row {
+                display: flex !important;
+                align-items: center !important;
+                gap: 0.5rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            .checkbox-row div[data-testid="stCheckbox"] {
+                margin-bottom: 0 !important;
+            }
             </style>
             """, unsafe_allow_html=True)
             
+            # Initialize session state for button toggles if not exists
+            if 'low_selected' not in st.session_state:
+                st.session_state.low_selected = False
+            if 'medium_selected' not in st.session_state:
+                st.session_state.medium_selected = False
+            if 'high_selected' not in st.session_state:
+                st.session_state.high_selected = False
+            
+            # Functions to toggle button states
+            def toggle_low():
+                st.session_state.low_selected = not st.session_state.low_selected
+                update_selected_columns()
+            
+            def toggle_medium():
+                st.session_state.medium_selected = not st.session_state.medium_selected
+                update_selected_columns()
+            
+            def toggle_high():
+                st.session_state.high_selected = not st.session_state.high_selected
+                update_selected_columns()
+            
+            def update_selected_columns():
+                # Get all columns that should be selected based on current button states
+                new_selected = []
+                if st.session_state.low_selected:
+                    new_selected.extend([col for col, pct in missing_percentages.items() if pct < 5])
+                if st.session_state.medium_selected:
+                    new_selected.extend([col for col, pct in missing_percentages.items() if 5 <= pct < 20])
+                if st.session_state.high_selected:
+                    new_selected.extend([col for col, pct in missing_percentages.items() if pct >= 20])
+                # Update selected_columns while preserving individual checkbox selections
+                for col in df.columns:
+                    if col in new_selected and col not in selected_columns:
+                        selected_columns.append(col)
+                    elif col not in new_selected and col in selected_columns and any([
+                        st.session_state.low_selected and missing_percentages[col] < 5,
+                        st.session_state.medium_selected and 5 <= missing_percentages[col] < 20,
+                        st.session_state.high_selected and missing_percentages[col] >= 20
+                    ]):
+                        selected_columns.remove(col)
+            
             col1, col2, col3 = st.columns(3)
             with col1:
-                if st.button("🟢 Low (<5%)", key="select_low"):
-                    selected_columns = [col for col, pct in missing_percentages.items() if pct < 5]
+                if st.button("🟢 Low (<5%)", key="select_low", on_click=toggle_low):
+                    pass
             with col2:
-                if st.button("🟡 Medium (5-20%)", key="select_medium"):
-                    selected_columns = [col for col, pct in missing_percentages.items() if 5 <= pct < 20]
+                if st.button("🟡 Medium (5-20%)", key="select_medium", on_click=toggle_medium):
+                    pass
             with col3:
-                if st.button("🔴 High (>20%)", key="select_high"):
-                    selected_columns = [col for col, pct in missing_percentages.items() if pct >= 20]
-            
+                if st.button("🔴 High (>20%)", key="select_high", on_click=toggle_high):
+                    pass
+
             # Sort columns based on selection
             sorted_columns = list(df.columns)
             if sort_option == "Name (A-Z)":
@@ -675,25 +725,6 @@ if profiling_file:
             # Create checkboxes for each column with color coding and tooltips
             col1, col2, col3 = st.columns(3)
             columns_per_col = (len(sorted_columns) + 2) // 3
-            
-            # Add custom CSS for checkbox layout
-            st.markdown("""
-            <style>
-            div[data-testid="column"] > div {
-                display: flex;
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-            .checkbox-container {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
-            .checkbox-container input[type="checkbox"] {
-                margin: 0;
-            }
-            </style>
-            """, unsafe_allow_html=True)
             
             for i, col in enumerate(sorted_columns):
                 # Calculate statistics for tooltip
@@ -724,42 +755,39 @@ if profiling_file:
                     symbol = "🔴"
                     color = '#F44336'
                 
-                # Create container div for checkbox and label
-                container_html = f"""
-                <div class="checkbox-container">
-                    <span title="{tooltip}" style="color: {color}; font-weight: bold;">
-                        {symbol} {col} ({missing_pct:.1f}%)
-                    </span>
-                </div>
-                """
-                
                 if i < columns_per_col:
                     with col1:
-                        st.markdown(container_html, unsafe_allow_html=True)
-                        if st.checkbox("", key=f"col_{i}", value=col in selected_columns):
-                            if col not in selected_columns:
-                                selected_columns.append(col)
-                        else:
-                            if col in selected_columns:
-                                selected_columns.remove(col)
+                        cols = st.columns([0.2, 0.8])
+                        with cols[0]:
+                            checked = st.checkbox("", key=f"col_{i}", value=col in selected_columns)
+                        with cols[1]:
+                            st.markdown(f'<div style="color: {color}; font-weight: bold;" title="{tooltip}">{symbol} {col} ({missing_pct:.1f}%)</div>', unsafe_allow_html=True)
+                        if checked and col not in selected_columns:
+                            selected_columns.append(col)
+                        elif not checked and col in selected_columns:
+                            selected_columns.remove(col)
                 elif i < columns_per_col * 2:
                     with col2:
-                        st.markdown(container_html, unsafe_allow_html=True)
-                        if st.checkbox("", key=f"col_{i}", value=col in selected_columns):
-                            if col not in selected_columns:
-                                selected_columns.append(col)
-                        else:
-                            if col in selected_columns:
-                                selected_columns.remove(col)
+                        cols = st.columns([0.2, 0.8])
+                        with cols[0]:
+                            checked = st.checkbox("", key=f"col_{i}", value=col in selected_columns)
+                        with cols[1]:
+                            st.markdown(f'<div style="color: {color}; font-weight: bold;" title="{tooltip}">{symbol} {col} ({missing_pct:.1f}%)</div>', unsafe_allow_html=True)
+                        if checked and col not in selected_columns:
+                            selected_columns.append(col)
+                        elif not checked and col in selected_columns:
+                            selected_columns.remove(col)
                 else:
                     with col3:
-                        st.markdown(container_html, unsafe_allow_html=True)
-                        if st.checkbox("", key=f"col_{i}", value=col in selected_columns):
-                            if col not in selected_columns:
-                                selected_columns.append(col)
-                        else:
-                            if col in selected_columns:
-                                selected_columns.remove(col)
+                        cols = st.columns([0.2, 0.8])
+                        with cols[0]:
+                            checked = st.checkbox("", key=f"col_{i}", value=col in selected_columns)
+                        with cols[1]:
+                            st.markdown(f'<div style="color: {color}; font-weight: bold;" title="{tooltip}">{symbol} {col} ({missing_pct:.1f}%)</div>', unsafe_allow_html=True)
+                        if checked and col not in selected_columns:
+                            selected_columns.append(col)
+                        elif not checked and col in selected_columns:
+                            selected_columns.remove(col)
             
             if selected_columns:
                 # Apply date filter if selected

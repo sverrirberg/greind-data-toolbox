@@ -623,19 +623,43 @@ if profiling_file:
                 for col in df.columns
             }
             
-            # Initialize selected_columns
-            selected_columns = []
-            
-            # Add search box
-            search_term = st.text_input("🔍 Search columns", "")
-            
-            # Add sorting options
-            sort_option = st.selectbox(
-                "Sort columns by",
-                ["Name (A-Z)", "Name (Z-A)", "Missing % (Low to High)", "Missing % (High to Low)"]
-            )
-            
-            # Add "Select All" buttons with smaller width
+            # Initialize session state for selected columns if not exists
+            if 'selected_columns' not in st.session_state:
+                st.session_state.selected_columns = []
+
+            # Initialize session state for button states if not exists
+            if 'button_states' not in st.session_state:
+                st.session_state.button_states = {
+                    'low': False,
+                    'medium': False,
+                    'high': False
+                }
+
+            def handle_button_click(category):
+                # Toggle the button state
+                st.session_state.button_states[category] = not st.session_state.button_states[category]
+                
+                # Get columns for this category
+                if category == 'low':
+                    category_columns = [col for col, pct in missing_percentages.items() if pct < 5]
+                elif category == 'medium':
+                    category_columns = [col for col, pct in missing_percentages.items() if 5 <= pct < 20]
+                else:  # high
+                    category_columns = [col for col, pct in missing_percentages.items() if pct >= 20]
+                
+                # If button is now active, add columns
+                if st.session_state.button_states[category]:
+                    for col in category_columns:
+                        if col not in st.session_state.selected_columns:
+                            st.session_state.selected_columns.append(col)
+                # If button is now inactive, remove columns
+                else:
+                    st.session_state.selected_columns = [
+                        col for col in st.session_state.selected_columns 
+                        if col not in category_columns
+                    ]
+
+            # Add "Select All" buttons with smaller width and toggle functionality
             st.markdown("""
             <style>
             div[data-testid="column"] > div > div > div > div > div[data-testid="stButton"] > button {
@@ -654,58 +678,32 @@ if profiling_file:
             }
             </style>
             """, unsafe_allow_html=True)
-            
-            # Initialize session state for button toggles if not exists
-            if 'low_selected' not in st.session_state:
-                st.session_state.low_selected = False
-            if 'medium_selected' not in st.session_state:
-                st.session_state.medium_selected = False
-            if 'high_selected' not in st.session_state:
-                st.session_state.high_selected = False
-            
-            # Functions to toggle button states
-            def toggle_low():
-                st.session_state.low_selected = not st.session_state.low_selected
-                update_selected_columns()
-            
-            def toggle_medium():
-                st.session_state.medium_selected = not st.session_state.medium_selected
-                update_selected_columns()
-            
-            def toggle_high():
-                st.session_state.high_selected = not st.session_state.high_selected
-                update_selected_columns()
-            
-            def update_selected_columns():
-                # Get all columns that should be selected based on current button states
-                new_selected = []
-                if st.session_state.low_selected:
-                    new_selected.extend([col for col, pct in missing_percentages.items() if pct < 5])
-                if st.session_state.medium_selected:
-                    new_selected.extend([col for col, pct in missing_percentages.items() if 5 <= pct < 20])
-                if st.session_state.high_selected:
-                    new_selected.extend([col for col, pct in missing_percentages.items() if pct >= 20])
-                # Update selected_columns while preserving individual checkbox selections
-                for col in df.columns:
-                    if col in new_selected and col not in selected_columns:
-                        selected_columns.append(col)
-                    elif col not in new_selected and col in selected_columns and any([
-                        st.session_state.low_selected and missing_percentages[col] < 5,
-                        st.session_state.medium_selected and 5 <= missing_percentages[col] < 20,
-                        st.session_state.high_selected and missing_percentages[col] >= 20
-                    ]):
-                        selected_columns.remove(col)
-            
+
             col1, col2, col3 = st.columns(3)
             with col1:
-                if st.button("🟢 Low (<5%)", key="select_low", on_click=toggle_low):
-                    pass
+                st.button(
+                    "🟢 Low (<5%)" + (" ✓" if st.session_state.button_states['low'] else ""),
+                    key="select_low",
+                    on_click=handle_button_click,
+                    args=('low',),
+                    type="secondary" if st.session_state.button_states['low'] else "primary"
+                )
             with col2:
-                if st.button("🟡 Medium (5-20%)", key="select_medium", on_click=toggle_medium):
-                    pass
+                st.button(
+                    "🟡 Medium (5-20%)" + (" ✓" if st.session_state.button_states['medium'] else ""),
+                    key="select_medium",
+                    on_click=handle_button_click,
+                    args=('medium',),
+                    type="secondary" if st.session_state.button_states['medium'] else "primary"
+                )
             with col3:
-                if st.button("🔴 High (>20%)", key="select_high", on_click=toggle_high):
-                    pass
+                st.button(
+                    "🔴 High (>20%)" + (" ✓" if st.session_state.button_states['high'] else ""),
+                    key="select_high",
+                    on_click=handle_button_click,
+                    args=('high',),
+                    type="secondary" if st.session_state.button_states['high'] else "primary"
+                )
 
             # Sort columns based on selection
             sorted_columns = list(df.columns)
@@ -759,35 +757,38 @@ if profiling_file:
                     with col1:
                         cols = st.columns([0.2, 0.8])
                         with cols[0]:
-                            checked = st.checkbox("", key=f"col_{i}", value=col in selected_columns)
+                            checked = st.checkbox("", key=f"col_{i}", value=col in st.session_state.selected_columns)
                         with cols[1]:
                             st.markdown(f'<div style="color: {color}; font-weight: bold;" title="{tooltip}">{symbol} {col} ({missing_pct:.1f}%)</div>', unsafe_allow_html=True)
-                        if checked and col not in selected_columns:
-                            selected_columns.append(col)
-                        elif not checked and col in selected_columns:
-                            selected_columns.remove(col)
+                        if checked and col not in st.session_state.selected_columns:
+                            st.session_state.selected_columns.append(col)
+                        elif not checked and col in st.session_state.selected_columns:
+                            st.session_state.selected_columns.remove(col)
                 elif i < columns_per_col * 2:
                     with col2:
                         cols = st.columns([0.2, 0.8])
                         with cols[0]:
-                            checked = st.checkbox("", key=f"col_{i}", value=col in selected_columns)
+                            checked = st.checkbox("", key=f"col_{i}", value=col in st.session_state.selected_columns)
                         with cols[1]:
                             st.markdown(f'<div style="color: {color}; font-weight: bold;" title="{tooltip}">{symbol} {col} ({missing_pct:.1f}%)</div>', unsafe_allow_html=True)
-                        if checked and col not in selected_columns:
-                            selected_columns.append(col)
-                        elif not checked and col in selected_columns:
-                            selected_columns.remove(col)
+                        if checked and col not in st.session_state.selected_columns:
+                            st.session_state.selected_columns.append(col)
+                        elif not checked and col in st.session_state.selected_columns:
+                            st.session_state.selected_columns.remove(col)
                 else:
                     with col3:
                         cols = st.columns([0.2, 0.8])
                         with cols[0]:
-                            checked = st.checkbox("", key=f"col_{i}", value=col in selected_columns)
+                            checked = st.checkbox("", key=f"col_{i}", value=col in st.session_state.selected_columns)
                         with cols[1]:
                             st.markdown(f'<div style="color: {color}; font-weight: bold;" title="{tooltip}">{symbol} {col} ({missing_pct:.1f}%)</div>', unsafe_allow_html=True)
-                        if checked and col not in selected_columns:
-                            selected_columns.append(col)
-                        elif not checked and col in selected_columns:
-                            selected_columns.remove(col)
+                        if checked and col not in st.session_state.selected_columns:
+                            st.session_state.selected_columns.append(col)
+                        elif not checked and col in st.session_state.selected_columns:
+                            st.session_state.selected_columns.remove(col)
+            
+            # Update the selected_columns list from session state
+            selected_columns = st.session_state.selected_columns.copy()
             
             if selected_columns:
                 # Apply date filter if selected

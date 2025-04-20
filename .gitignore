@@ -1,0 +1,58 @@
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Model + data files
+*.pkl
+
+
+# Logs + feedback
+logs/
+*.log
+
+# System files
+.DS_Store
+
+# Jupyter + notebook checkpoints
+.ipynb_checkpoints/
+
+# VS Code settings
+.vscode/
+
+# Virtual environment
+.venv/
+
+# macOS
+.DS_Store
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Streamlit logs
+.streamlit/
+
+# Jupyter & profiler outputs
+.ipynb_checkpoints/
+*.html
+
+# Model & data files
+*.pkl
+*.log
+feedback_logs/
+datasets/
+
+# Allow model files
+!xgb_unspsc_model.pkl
+!xgb_label_encoder.pkl
+
+# But keep this specific one
+!UNSPSC_classification.csv

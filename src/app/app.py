@@ -105,12 +105,45 @@ with st.sidebar:
         justify-content: center;
         margin-bottom: 1rem;
     }
+    .info-box {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+    .info-box h3 {
+        color: #333;
+        margin-top: 0;
+    }
+    .info-box ul {
+        margin: 0;
+        padding-left: 1rem;
+    }
+    .info-box li {
+        margin: 0.5rem 0;
+        color: #666;
+        font-size: 0.9em;
+    }
     </style>
     <div class="logo-container">
     """, unsafe_allow_html=True)
     st.image(logo, use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
     st.markdown("**Version:** 1.1.2", unsafe_allow_html=True)
+    
+    # Important Information
+    st.markdown("""
+    <div class="info-box">
+        <h3>📝 Important Information</h3>
+        <ul>
+            <li>The CSV file should be in UTF-8 encoding</li>
+            <li>The first row should contain column headers</li>
+            <li>Date columns should be in a standard format (YYYY-MM-DD or similar)</li>
+            <li>Numeric columns should use dot (.) as decimal separator</li>
+            <li>Empty cells will be treated as missing values</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
 
 def find_duplicates(df):
     """Find duplicate rows in the dataframe."""
@@ -420,21 +453,6 @@ def get_status_indicator(percentage):
 
 # Main app content
 st.markdown("<h1 style='text-align: center; margin-bottom: 2rem;'>🧪 CSV Data Profiler</h1>", unsafe_allow_html=True)
-
-# Information text
-with st.container():
-    st.markdown("""
-    <div class="section">
-        <h3>📝 Important Information</h3>
-        <ul>
-            <li>The CSV file should be in UTF-8 encoding</li>
-            <li>The first row should contain column headers</li>
-            <li>Date columns should be in a standard format (YYYY-MM-DD or similar)</li>
-            <li>Numeric columns should use dot (.) as decimal separator</li>
-            <li>Empty cells will be treated as missing values</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
 
 # Upload section
 with st.container():
